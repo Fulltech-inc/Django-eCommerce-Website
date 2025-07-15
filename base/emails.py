@@ -7,7 +7,7 @@ def send_account_activation_email(email, email_token):
     subject = "Your account needs to be verified"
     email_from = settings.DEFAULT_FROM_EMAIL
 
-    activation_link = f'http://127.0.0.1:8000/accounts/activate/{email_token}'
+    activation_link = f'http://192.168.0.194:8000/accounts/activate/{email_token}'
 
     html_message = render_to_string(
         'emails/account_activation.html', {'activation_link': activation_link})
