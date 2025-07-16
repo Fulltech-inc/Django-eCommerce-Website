@@ -144,15 +144,15 @@ a:hover {
 }
 
 .hover-bg:hover {
-  background: #3167eb;
+  background: #fa3434;
   /* For browsers that do not support gradients */
-  background: -webkit-linear-gradient(left top, #3167eb, #3167eb);
+  background: -webkit-linear-gradient(left top, #fa3434, #fa3434);
   /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(bottom right, #3167eb, #3167eb);
+  background: -o-linear-gradient(bottom right, #fa3434, #fa3434);
   /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(bottom right, #3167eb, #3167eb);
+  background: -moz-linear-gradient(bottom right, #fa3434, #fa3434);
   /* For Firefox 3.6 to 15 */
-  background: linear-gradient(to bottom right, #3167eb, #3167eb);
+  background: linear-gradient(to bottom right, #fa3434, #fa3434);
   /* Standard syntax */
   transition: 0.5s;
 }
@@ -426,7 +426,7 @@ article:after,
 
 .bg-pattern {
   background-image: url(../images/banners/bg-pattern.svg),
-    linear-gradient(135deg, #3167eb, #545454);
+    linear-gradient(135deg, #fa3434, #545454);
   background-size: cover, auto;
   background-repeat: no-repeat, repeat;
   background-position: 0px 0px, 50% 50%;
@@ -460,13 +460,13 @@ article:after,
   transition: 0.5s;
   background: #545454;
   /* For browsers that do not support gradients */
-  background: -webkit-linear-gradient(left top, #3167eb, #545454);
+  background: -webkit-linear-gradient(left top, #fa3434, #545454);
   /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(bottom right, #3167eb, #545454);
+  background: -o-linear-gradient(bottom right, #fa3434, #545454);
   /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(bottom right, #3167eb, #545454);
+  background: -moz-linear-gradient(bottom right, #fa3434, #545454);
   /* For Firefox 3.6 to 15 */
-  background: linear-gradient(to bottom right, #3167eb, #545454);
+  background: linear-gradient(to bottom right, #fa3434, #545454);
   /* Standard syntax */
 }
 .overlay-gradient:hover:before {
@@ -565,7 +565,7 @@ p:last-child {
   color: #545454;
 }
 .widget-header a:hover {
-  color: #3167eb;
+  color: #fa3434;
 }
 .widget-header i {
   color: #969696;
@@ -582,7 +582,7 @@ p:last-child {
   right: -10px;
 }
 .widget-header:hover i {
-  color: #3167eb;
+  color: #fa3434;
 }
 
 /* desktop only */
@@ -595,7 +595,7 @@ p:last-child {
   color: inherit;
 }
 .section-footer ul a:hover {
-  color: #3167eb;
+  color: #fa3434;
 }
 .section-footer .logo-footer {
   height: 40px;
@@ -756,7 +756,7 @@ p:last-child {
   color: #212529;
 }
 .itemside a.title:hover {
-  color: #3167eb;
+  color: #fa3434;
 }
 
 a.itemside {
@@ -902,7 +902,7 @@ ul.row-sm {
 }
 .list-normal li:before {
   content: "\2022";
-  color: #3167eb;
+  color: #fa3434;
   display: inline-block;
   width: 1em;
   margin-left: -1em;
@@ -920,7 +920,7 @@ ul.row-sm {
   color: #545454;
 }
 .list-menu a:hover {
-  color: #3167eb;
+  color: #fa3434;
 }
 
 .cols-two {
@@ -940,7 +940,7 @@ a[class*="card"] {
   color: initial;
 }
 a[class*="card"]:hover .title {
-  color: #3167eb;
+  color: #fa3434;
 }
 
 /* BASE STYLE FOR PRODUCT ITEM */
@@ -949,7 +949,7 @@ a[class*="card"]:hover .title {
   display: block;
 }
 [class*="card-product"] a.title:hover {
-  color: #3167eb;
+  color: #fa3434;
 }
 [class*="card-product"] .badge {
   top: 10px;
@@ -1000,7 +1000,7 @@ a[class*="card"]:hover .title {
   color: #ccc;
 }
 .card-product-grid .topbar a:hover {
-  color: #3167eb;
+  color: #fa3434;
 }
 .card-product-grid .fix-height {
   height: 80px;
@@ -1283,8 +1283,8 @@ a[class*="card"]:hover .title {
   opacity: 0;
 }
 .checkbox-btn input:checked ~ .btn {
-  border-color: #3167eb;
-  background-color: #3167eb;
+  border-color: #fa3434;
+  background-color: #fa3434;
   color: #fff;
 }
 

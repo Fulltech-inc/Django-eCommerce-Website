@@ -43,13 +43,13 @@
 
 a.facebook {
   color: #fff;
-  background-color: #4267b2;
+  background-color: #f55555;
 }
 
 a.facebook .facebook-icon {
   height: 28px;
   width: 28px;
-  color: #0171d3;
+  color: #fa3434;
   font-size: 20px;
   border-radius: 50%;
   display: flex;
