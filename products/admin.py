@@ -10,6 +10,8 @@ admin.site.register(Coupon)
 class ProductImageAdmin(admin.StackedInline):
     model = ProductImage
 
+class ProductBrandAdmin(admin.StackedInline):
+    model = ProductBrand
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['product_name', 'price']
@@ -30,4 +32,5 @@ class SizeVariantAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage)
+admin.site.register(ProductBrand)
 admin.site.register(ProductReview)

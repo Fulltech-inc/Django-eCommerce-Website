@@ -37,12 +37,24 @@ class SizeVariant(BaseModel):
         return self.size_name
 
 
+class ProductBrand(BaseModel):
+    brand_name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='brands')
+
+    def img_preview(self):
+        return mark_safe(f'<img src="{self.image.url}" width="500"/>')
+    
+    def __str__(self) -> str:
+        return self.brand_name
+    
+
 class Product(BaseModel):
     parent = models.ForeignKey(
         'self', related_name='variants', on_delete=models.CASCADE, blank=True, null=True)
     product_name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
+    brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name="products", default=None, null=True, blank=True)
     price = models.IntegerField()
     product_desription = models.TextField()
     color_variant = models.ManyToManyField(ColorVariant, blank=True)
@@ -75,6 +87,7 @@ class ProductImage(BaseModel):
 
     def img_preview(self):
         return mark_safe(f'<img src="{self.image.url}" width="500"/>')
+    
 
 
 class Coupon(BaseModel):

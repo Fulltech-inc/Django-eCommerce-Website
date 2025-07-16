@@ -134,8 +134,8 @@
             <br />
             <dl class="row">
               <dt class="col-sm-3">Brand</dt>
-              <dd class="col-sm-9">Itel</dd>
-
+              <dd class="col-sm-9">{{product.brand.brand_name}}</dd>
+              
               <dt class="col-sm-3">Color</dt>
               <dd class="col-sm-9">
                 {% for color in product.color_variant.all %} {{ color.color_name }} {% endfor %}
