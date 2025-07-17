@@ -54,6 +54,7 @@
     text-align: center;
     z-index: 2;
     padding: 20px;
+    pointer-events: none; /* Let clicks go through by default */
   }
 
   .carousel-overlay img.logo {
@@ -62,6 +63,7 @@
   }
 
   .carousel-overlay .btn-shop {
+    pointer-events: auto; /* These elements can still be clicked */
     padding: 10px 20px;
     font-size: 1.1rem;
   }
