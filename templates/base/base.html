@@ -104,7 +104,9 @@
                 onmouseout="this.start();"
               >
                 <span class="header-promotion marquee-span">
-                  {{banner.content}}
+                  {% for banner in banners %}
+                    {{ banner.content }}
+                  {% endfor %}
                 </span>
               </marquee>
             </div>

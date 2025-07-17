@@ -283,7 +283,7 @@ def download_invoice(request, order_id):
 
 @login_required
 def profile_view(request, username):
-    banner= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     user_name = get_object_or_404(User, username=username)
     user = request.user
     profile = user.profile
@@ -301,7 +301,7 @@ def profile_view(request, username):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     context = {
-        "banner": banner,
+        "banners": banners,
         'user_name': user_name,
         'user_form': user_form,
         'profile_form': profile_form
@@ -353,9 +353,9 @@ def update_shipping_address(request):
 # Order history view
 @login_required
 def order_history(request):
-    banner= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     orders = Order.objects.filter(user=request.user).order_by('-order_date')
-    return render(request, 'accounts/order_history.html', {'orders': orders, "banner": banner})
+    return render(request, 'accounts/order_history.html', {'orders': orders, "banners": banners})
 
 
 # Create an order view

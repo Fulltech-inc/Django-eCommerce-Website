@@ -11,7 +11,7 @@ def index(request):
     query = Product.objects.all()
     categories = Category.objects.all()
 
-    banner= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     billboards= Billboards.objects.all()
 
     selected_sort = request.GET.get('sort')
@@ -41,7 +41,7 @@ def index(request):
         print(e)
 
     context = {
-        'banner': banner,
+        'banners': banners,
         'billboards': billboards,
         'products': products,
         'categories': categories,
@@ -52,7 +52,7 @@ def index(request):
 
 
 def product_search(request):
-    banner= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all().first()
     query = request.GET.get('q', '')
 
     if query:
@@ -62,29 +62,29 @@ def product_search(request):
     else:
         products = Product.objects.none()
 
-    context = {'query': query, 'products': products, "banner": banner}
+    context = {'query': query, 'products': products, "banners": banners}
     return render(request, 'home/search.html', context)
 
 
 def contact(request):
-    banner= HeaderBanner.objects.all().first()
-    context = {"form_id": "xgvvlrvn", "banner": banner}
+    banners= HeaderBanner.objects.all().first()
+    context = {"form_id": "xgvvlrvn", "banners": banners}
     return render(request, 'home/contact.html', context)
 
 
 def about(request):
-    banner= HeaderBanner.objects.all().first()
-    context = {"banner": banner}
+    banners= HeaderBanner.objects.all().first()
+    context = {"banners": banners}
     return render(request, 'home/about.html', context)
 
 
 def terms_and_conditions(request):
-    banner= HeaderBanner.objects.all().first()
-    context = {"banner": banner}
+    banners= HeaderBanner.objects.all().first()
+    context = {"banners": banners}
     return render(request, 'home/terms_and_conditions.html', context)
 
 
 def privacy_policy(request):
-    context = {"banner": banner}
-    banner= HeaderBanner.objects.all().first()
+    context = {"banners": banners}
+    banners= HeaderBanner.objects.all().first()
     return render(request, 'home/privacy_policy.html', context)

@@ -12,7 +12,7 @@ from home.models import HeaderBanner
 # Create your views here.
 
 def get_product(request, slug):
-    banner= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     product = get_object_or_404(Product, slug=slug)
     sorted_size_variants = product.size_variant.all().order_by('size_name')
     related_products = list(product.category.products.filter(parent=None).exclude(uid=product.uid))
@@ -57,7 +57,7 @@ def get_product(request, slug):
         in_wishlist = Wishlist.objects.filter(user=request.user, product=product).exists()
 
     context = {
-        "banner": banner,
+        "banners": banners,
         'product': product,
         'sorted_size_variants': sorted_size_variants,
         'related_products': related_products,
@@ -78,10 +78,10 @@ def get_product(request, slug):
 # Product Review view
 @login_required
 def product_reviews(request):
-    banner= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     reviews = ProductReview.objects.filter(
         user=request.user).select_related('product').order_by('-date_added')
-    return render(request, 'product/all_product_reviews.html', {'reviews': reviews, "banner": banner,})
+    return render(request, 'product/all_product_reviews.html', {'reviews': reviews, "banners": banners,})
 
 
 # Edit Review view
@@ -181,9 +181,9 @@ def remove_from_wishlist(request, uid):
 # Wishlist View
 @login_required
 def wishlist_view(request):
-    banner= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     wishlist_items = Wishlist.objects.filter(user=request.user)
-    return render(request, 'product/wishlist.html', {'wishlist_items': wishlist_items, "banner": banner,})
+    return render(request, 'product/wishlist.html', {'wishlist_items': wishlist_items, "banners": banners,})
 
 
 # Move to cart functionality on wishlist page.
