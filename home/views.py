@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render
 from products.models import Product, Category
+from home.models import HeaderBanner, Billboards
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here.
@@ -9,6 +10,10 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 def index(request):
     query = Product.objects.all()
     categories = Category.objects.all()
+
+    banner= HeaderBanner.objects.all().first()
+    billboards= Billboards.objects.all()
+
     selected_sort = request.GET.get('sort')
     selected_category = request.GET.get('category')
 
@@ -36,6 +41,8 @@ def index(request):
         print(e)
 
     context = {
+        'banner': banner,
+        'billboards': billboards,
         'products': products,
         'categories': categories,
         'selected_category': selected_category,
@@ -45,6 +52,7 @@ def index(request):
 
 
 def product_search(request):
+    banner= HeaderBanner.objects.all().first()
     query = request.GET.get('q', '')
 
     if query:
@@ -54,22 +62,29 @@ def product_search(request):
     else:
         products = Product.objects.none()
 
-    context = {'query': query, 'products': products}
+    context = {'query': query, 'products': products, "banner": banner}
     return render(request, 'home/search.html', context)
 
 
 def contact(request):
-    context = {"form_id": "xgvvlrvn"}
+    banner= HeaderBanner.objects.all().first()
+    context = {"form_id": "xgvvlrvn", "banner": banner}
     return render(request, 'home/contact.html', context)
 
 
 def about(request):
-    return render(request, 'home/about.html')
+    banner= HeaderBanner.objects.all().first()
+    context = {"banner": banner}
+    return render(request, 'home/about.html', context)
 
 
 def terms_and_conditions(request):
-    return render(request, 'home/terms_and_conditions.html')
+    banner= HeaderBanner.objects.all().first()
+    context = {"banner": banner}
+    return render(request, 'home/terms_and_conditions.html', context)
 
 
 def privacy_policy(request):
-    return render(request, 'home/privacy_policy.html')
+    context = {"banner": banner}
+    banner= HeaderBanner.objects.all().first()
+    return render(request, 'home/privacy_policy.html', context)

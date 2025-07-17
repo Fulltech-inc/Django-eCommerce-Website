@@ -21,6 +21,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.shortcuts import redirect, render, get_object_or_404
 from accounts.forms import UserUpdateForm, UserProfileForm, ShippingAddressForm, CustomPasswordChangeForm
+from home.models import HeaderBanner
 
 
 # Create your views here.
@@ -282,6 +283,7 @@ def download_invoice(request, order_id):
 
 @login_required
 def profile_view(request, username):
+    banner= HeaderBanner.objects.all().first()
     user_name = get_object_or_404(User, username=username)
     user = request.user
     profile = user.profile
@@ -299,6 +301,7 @@ def profile_view(request, username):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     context = {
+        "banner": banner,
         'user_name': user_name,
         'user_form': user_form,
         'profile_form': profile_form
@@ -350,8 +353,9 @@ def update_shipping_address(request):
 # Order history view
 @login_required
 def order_history(request):
+    banner= HeaderBanner.objects.all().first()
     orders = Order.objects.filter(user=request.user).order_by('-order_date')
-    return render(request, 'accounts/order_history.html', {'orders': orders})
+    return render(request, 'accounts/order_history.html', {'orders': orders, "banner": banner})
 
 
 # Create an order view
