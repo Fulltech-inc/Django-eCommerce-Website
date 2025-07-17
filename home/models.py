@@ -4,9 +4,27 @@ from django.urls import reverse
 from django.db import models
 from django import forms
 from django_countries.fields import CountryField
+from django.utils.html import mark_safe
 
-# Create your models here.
+# avdertisement models
+class Billboards(BaseModel):
+    billboard_name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='billboards')
 
+    def img_preview(self):
+        return mark_safe(f'<img src="{self.image.url}" width="500"/>')
+    
+    def __str__(self) -> str:
+        return self.billboard_name
+    
+class HeaderBanner(BaseModel):
+    name = models.CharField(max_length=100)
+    content = models.CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.name   
+
+# shipping address model
 class ShippingAddress(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
