@@ -1,4 +1,5 @@
 {% extends "base/base.html"%} {% block start %}
+{% load static %}
 <style>
   .filter-section {
       margin-bottom: 20px;
@@ -25,8 +26,96 @@
     animation-range: entry 0% cover 40%;
   }
 </style>
+
+<style>
+  #billboardCarousel {
+    max-height: 75vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #billboardCarousel .carousel-item img {
+    height: 75vh;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3); /* semi-transparent dark overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 2;
+    padding: 20px;
+  }
+
+  .carousel-overlay img.logo {
+    max-height: 80px;
+    margin-bottom: 20px;
+  }
+
+  .carousel-overlay .btn-shop {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+  }
+</style>
+
 <div class="container mt-3 pt-3">
   {% include 'base/alert.html' %}
+
+
+
+<div id="billboardCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for billboard in billboards %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <img src="/media/{{ billboard.image }}" alt="Billboard Image">
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Overlay with logo and button -->
+  <div class="carousel-overlay">
+    <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
+    <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
+  </div>
+
+  <!-- Carousel Controls -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#billboardCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#billboardCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  </button>
+</div>
+
+
+<!-- Section Header for Below Content -->
+<section id="shop-section" class="mt-5 mb-3">
+  <!-- Slider Header Banner -->
+    <div class="header-banner slide-up" aria-hidden="false">
+      <div class="container">
+        <div class="d-flex justify-content-center">
+          <div class="html-slot-container">
+            <input type="hidden" id="endTime" value="null" />
+            <div class="content mb-3 text-align-center" text-align="center">
+              <h5 class="shop-label mt-2"><b>Village Tech Official Shop</b></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+
+
   <!-- Filter Section -->
   <div class="filter-section mb-3">
     <form method="GET" class="row">
