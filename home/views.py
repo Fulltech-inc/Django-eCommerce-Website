@@ -85,6 +85,6 @@ def terms_and_conditions(request):
 
 
 def privacy_policy(request):
-    context = {"banners": banners}
     banners= HeaderBanner.objects.all()
+    context = {"banners": banners}
     return render(request, 'home/privacy_policy.html', context)
