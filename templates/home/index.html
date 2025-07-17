@@ -69,53 +69,108 @@
   }
 </style>
 
+<style>
+
+/* ✅ Bottom horizontal brand carousel */
+.brand-carousel-wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 25%;
+  overflow: hidden;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.7), transparent);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+
+.brand-carousel-track {
+  display: flex;
+  gap: 40px;
+  animation: scroll 40s linear infinite;
+}
+
+.brand-carousel-track img {
+  height: 80px;
+  object-fit: contain;
+  border-radius: 10px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4)); /* true drop shadow */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+</style>
+
+
+
 <div class="container mt-3 pt-3">
   {% include 'base/alert.html' %}
 
-
-
-<div id="billboardCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    {% for billboard in billboards %}
-    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-      <img src="/media/{{ billboard.image }}" alt="Billboard Image">
+  <div id="billboardCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <!-- Main billboard images -->
+    <div class="carousel-inner">
+      {% for billboard in billboards %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="/media/{{ billboard.image }}" alt="Billboard Image">
+      </div>
+      {% endfor %}
     </div>
+
+    <!-- Overlay with logo, shop button, and brand carousel -->
+    <div class="carousel-overlay">
+      <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
+      <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
+
+      <!-- Brand logo horizontal strip -->
+<div class="brand-carousel-wrapper">
+  <div class="brand-carousel-track">
+    {% for brand in brands %}
+      <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
+    {% endfor %}
+    {% for brand in brands %}
+      <!-- Duplicate for infinite scroll effect -->
+      <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
     {% endfor %}
   </div>
-
-  <!-- Overlay with logo and button -->
-  <div class="carousel-overlay">
-    <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
-    <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
-  </div>
-
-  <!-- Carousel Controls -->
-  <button class="carousel-control-prev" type="button" data-bs-target="#billboardCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#billboardCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-  </button>
 </div>
 
+    </div>
 
-<!-- Section Header for Below Content -->
-<section id="shop-section" class="mt-5 mb-3">
-  <!-- Slider Header Banner -->
-    <div class="header-banner slide-up" aria-hidden="false">
-      <div class="container">
-        <div class="d-flex justify-content-center">
-          <div class="html-slot-container">
-            <input type="hidden" id="endTime" value="null" />
-            <div class="content mb-3 text-align-center" text-align="center">
-              <h5 class="shop-label mt-2"><b>Village Tech Official Shop</b></h5>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#billboardCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#billboardCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+
+
+  <!-- Section Header for Below Content -->
+  <section id="shop-section" class="mt-5 mb-3">
+    <!-- Slider Header Banner -->
+      <div class="header-banner slide-up" aria-hidden="false">
+        <div class="container">
+          <div class="d-flex justify-content-center">
+            <div class="html-slot-container">
+              <input type="hidden" id="endTime" value="null" />
+              <div class="content mb-3 text-align-center" text-align="center">
+                <h5 class="shop-label mt-2"><b>Village Tech Official Shop</b></h5>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-</section>
-
+  </section>
 
 
   <!-- Filter Section -->
@@ -200,5 +255,8 @@
   </nav>
   
 </div>
+
+
+
 
 {% endblock %}

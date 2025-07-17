@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render
-from products.models import Product, Category
+from products.models import Product, Category, ProductBrand
 from home.models import HeaderBanner, Billboards
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -11,6 +11,7 @@ def index(request):
     query = Product.objects.all()
     categories = Category.objects.all()
 
+    brands = ProductBrand.objects.all()
     banners= HeaderBanner.objects.all()
     billboards= Billboards.objects.all()
 
@@ -41,6 +42,7 @@ def index(request):
         print(e)
 
     context = {
+        'brands': brands,
         'banners': banners,
         'billboards': billboards,
         'products': products,
