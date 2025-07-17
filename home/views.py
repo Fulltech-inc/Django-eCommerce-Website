@@ -52,7 +52,7 @@ def index(request):
 
 
 def product_search(request):
-    banners= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     query = request.GET.get('q', '')
 
     if query:
@@ -67,24 +67,24 @@ def product_search(request):
 
 
 def contact(request):
-    banners= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     context = {"form_id": "xgvvlrvn", "banners": banners}
     return render(request, 'home/contact.html', context)
 
 
 def about(request):
-    banners= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     context = {"banners": banners}
     return render(request, 'home/about.html', context)
 
 
 def terms_and_conditions(request):
-    banners= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     context = {"banners": banners}
     return render(request, 'home/terms_and_conditions.html', context)
 
 
 def privacy_policy(request):
     context = {"banners": banners}
-    banners= HeaderBanner.objects.all().first()
+    banners= HeaderBanner.objects.all()
     return render(request, 'home/privacy_policy.html', context)
