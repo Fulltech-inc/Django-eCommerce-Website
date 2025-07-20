@@ -79,7 +79,7 @@
     overflow: hidden;
     height: 100px; /* Set a fixed height for the brand logo area */
     pointer-events: auto; /* Allow interaction if needed, though autoplay is on */
-    
+
     background: #ffffff;
     background: -webkit-linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
     background: -moz-linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
@@ -246,22 +246,54 @@
 
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const brandSwiper = new Swiper('.brand-swiper', {
-      slidesPerView: 'auto',
-      spaceBetween: 20, // Optional
-      speed: 5000, // Slower = smoother
-      allowTouchMove: true,
+    const swiperEl = document.querySelector('.brand-swiper');
+    const images = swiperEl.querySelectorAll('img');
+    let imagesLoadedCount = 0;
 
-      autoplay: {
-        delay: 0
-      },
+    function initSwiper() {
+      const brandSwiper = new Swiper('.brand-swiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 20,
+        speed: 5000,
+        allowTouchMove: true,
+        freeMode: true,
+        freeModeMomentum: false,
+        autoplay: {
+          delay: 0,
+          disableOnInteraction: false,
+        },
+      });
 
-      freeMode: true,
-      freeModeMomentum: false,
+      // Sometimes autoplay doesn’t start immediately, so force it
+      brandSwiper.autoplay.start();
+    }
+
+    // Check if all images are loaded before initializing swiper
+    images.forEach(img => {
+      if (img.complete) {
+        imagesLoadedCount++;
+      } else {
+        img.addEventListener('load', () => {
+          imagesLoadedCount++;
+          if (imagesLoadedCount === images.length) {
+            initSwiper();
+          }
+        });
+        img.addEventListener('error', () => {
+          imagesLoadedCount++;
+          if (imagesLoadedCount === images.length) {
+            initSwiper();
+          }
+        });
+      }
     });
+
+    // If all images were already loaded
+    if (imagesLoadedCount === images.length) {
+      initSwiper();
+    }
   });
 </script>
 {% endblock %}
