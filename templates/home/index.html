@@ -73,34 +73,30 @@
 <div class="container mt-3 pt-3">
   {% include 'base/alert.html' %}
 
-<div id="billboardCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
-  <!-- Main billboard images -->
-  <div class="carousel-inner">
-    {% for billboard in billboards %}
-    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-      <img src="/media/{{ billboard.image }}" alt="Billboard Image">
+  <div id="billboardCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <!-- Main billboard images -->
+    <div class="carousel-inner">
+      {% for billboard in billboards %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="/media/{{ billboard.image }}" alt="Billboard Image">
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
 
-  <!-- Overlay with logo, shop button, and brand carousel -->
-  <div class="carousel-overlay">
-    <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
-    <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
+    <!-- Overlay with logo, shop button, and brand carousel -->
+    <div class="carousel-overlay">
+      <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
+      <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
 
-    <!-- Brand carousel -->
-    <div class="brand-carousel slick-slider">
-  {% for brand in brands %}
-    <div class="brand-logo">
-      <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
+      <!-- Brand carousel -->
+      {% comment %} <div class="brand-carousel slick-slider">
+        {% for brand in brands %}
+          <div class="brand-logo">
+            <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
+          </div>
+        {% endfor %}
+      </div> {% endcomment %}
     </div>
-  {% endfor %}
-</div>
-
-  </div>
-</div>
-
-
 
     <!-- Carousel Controls -->
     <button class="carousel-control-prev" type="button" data-bs-target="#billboardCarousel" data-bs-slide="prev">
@@ -115,18 +111,18 @@
   <!-- Section Header for Below Content -->
   <section id="shop-section" class="mt-5 mb-3">
     <!-- Slider Header Banner -->
-      <div class="header-banner slide-up" aria-hidden="false">
-        <div class="container">
-          <div class="d-flex justify-content-center">
-            <div class="html-slot-container">
-              <input type="hidden" id="endTime" value="null" />
-              <div class="content mb-3 text-align-center" text-align="center">
-                <h5 class="shop-label mt-2"><b>Village Tech Official Shop</b></h5>
-              </div>
+    <div class="header-banner slide-up" aria-hidden="false">
+      <div class="container">
+        <div class="d-flex justify-content-center">
+          <div class="html-slot-container">
+            <input type="hidden" id="endTime" value="null" />
+            <div class="content mb-3 text-align-center" text-align="center">
+              <h5 class="shop-label mt-2"><b>Village Tech Official Shop</b></h5>
             </div>
           </div>
         </div>
       </div>
+    </div>
   </section>
 
 
