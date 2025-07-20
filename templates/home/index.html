@@ -58,7 +58,7 @@
   }
 
   .carousel-overlay img.logo {
-    max-height: 80px;
+    max-height: 90px;
     margin-bottom: 20px;
   }
 
@@ -69,51 +69,22 @@
   }
 </style>
 
-
-{% comment %}
-  The updated HTML structure now uses the Swiper.js layout (`swiper`, `swiper-wrapper`, `swiper-slide`).
-  The CSS positions this Swiper instance at the bottom of the overlay and ensures the logos are styled correctly.
-{% endcomment %}
-
 <style>
-  /* Ensure the overlay can contain the absolutely positioned brand carousel */
-  .carousel-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 2;
-    padding: 20px;
-    pointer-events: none;
-  }
-
-  .carousel-overlay img.logo {
-    max-height: 80px;
-    margin-bottom: 20px;
-  }
-
-  .carousel-overlay .btn-shop {
-    pointer-events: auto;
-    padding: 10px 20px;
-    font-size: 1.1rem;
-  }
-  
   /* Swiper Container Styling */
   .brand-swiper {
     position: absolute;
-    bottom: 20px; /* Position at the bottom of the overlay */
+    bottom: 0; /* Position at the bottom of the overlay */
     left: 0;
     width: 100%;
     overflow: hidden;
-    height: 60px; /* Set a fixed height for the brand logo area */
+    height: 100px; /* Set a fixed height for the brand logo area */
     pointer-events: auto; /* Allow interaction if needed, though autoplay is on */
+    
+    background: #ffffff;
+    background: -webkit-linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    background: -moz-linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#FFFFFF", endColorstr="#FFFFFF", GradientType=0);
   }
 
   /* Swiper Slide Styling */
@@ -125,7 +96,7 @@
   }
 
   .brand-swiper .swiper-slide img {
-    max-height: 50px; /* Control the max height of the brand logos */
+    max-height: 70px; /* Control the max height of the brand logos */
     width: auto;
     object-fit: contain; /* Ensure logos scale correctly without distortion */
   }
