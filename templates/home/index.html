@@ -70,79 +70,59 @@
 </style>
 
 <style>
-
-/* ✅ Bottom horizontal brand carousel */
-.brand-carousel-wrapper {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 25%;
-  overflow: hidden;
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.7), transparent);
-  display: flex;
-  align-items: center;
-  z-index: 10;
-}
-
-.brand-carousel-track {
-  display: flex;
-  gap: 40px;
-  animation: scroll 40s linear infinite;
-}
-
-.brand-carousel-track img {
-  height: 80px;
-  object-fit: contain;
-  border-radius: 10px;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4)); /* true drop shadow */
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
+  .brand-carousel {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(to top, white, transparent); /* adjust to your theme */
+    padding: 10px 0;
+    z-index: 50;
   }
-  100% {
-    transform: translateX(-50%);
+
+  .brand-carousel .brand-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
   }
-}
 
-
+  .brand-carousel img {
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.4)); /* true drop shadow */
+  }
 </style>
-
-
 
 <div class="container mt-3 pt-3">
   {% include 'base/alert.html' %}
 
-  <div id="billboardCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
-    <!-- Main billboard images -->
-    <div class="carousel-inner">
-      {% for billboard in billboards %}
-      <div class="carousel-item {% if forloop.first %}active{% endif %}">
-        <img src="/media/{{ billboard.image }}" alt="Billboard Image">
-      </div>
-      {% endfor %}
+<div id="billboardCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+  <!-- Main billboard images -->
+  <div class="carousel-inner">
+    {% for billboard in billboards %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <img src="/media/{{ billboard.image }}" alt="Billboard Image">
     </div>
-
-    <!-- Overlay with logo, shop button, and brand carousel -->
-    <div class="carousel-overlay">
-      <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
-      <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
-
-      <!-- Brand logo horizontal strip -->
-<div class="brand-carousel-wrapper">
-  <div class="brand-carousel-track">
-    {% for brand in brands %}
-      <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
     {% endfor %}
-    {% for brand in brands %}
-      <!-- Duplicate for infinite scroll effect -->
+  </div>
+
+  <!-- Overlay with logo, shop button, and brand carousel -->
+  <div class="carousel-overlay">
+    <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
+    <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
+
+    <!-- Brand carousel -->
+    <div class="brand-carousel slick-slider">
+  {% for brand in brands %}
+    <div class="brand-logo">
       <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
-    {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
   </div>
 </div>
 
-    </div>
 
 
     <!-- Carousel Controls -->
@@ -256,7 +236,22 @@
   
 </div>
 
-
-
+<script>
+  $(document).ready(function () {
+    $('.brand-carousel').slick({
+      slidesToShow: 6,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 0,
+      speed: 5000,
+      cssEase: 'linear',
+      infinite: true,
+      arrows: false,
+      dots: false,
+      pauseOnHover: false,
+      variableWidth: true
+    });
+  });
+</script>
 
 {% endblock %}
