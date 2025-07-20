@@ -70,6 +70,68 @@
 </style>
 
 
+{% comment %}
+  The updated HTML structure now uses the Swiper.js layout (`swiper`, `swiper-wrapper`, `swiper-slide`).
+  The CSS positions this Swiper instance at the bottom of the overlay and ensures the logos are styled correctly.
+{% endcomment %}
+
+<style>
+  /* Ensure the overlay can contain the absolutely positioned brand carousel */
+  .carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 2;
+    padding: 20px;
+    pointer-events: none;
+  }
+
+  .carousel-overlay img.logo {
+    max-height: 80px;
+    margin-bottom: 20px;
+  }
+
+  .carousel-overlay .btn-shop {
+    pointer-events: auto;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+  }
+  
+  /* Swiper Container Styling */
+  .brand-swiper {
+    position: absolute;
+    bottom: 20px; /* Position at the bottom of the overlay */
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 60px; /* Set a fixed height for the brand logo area */
+    pointer-events: auto; /* Allow interaction if needed, though autoplay is on */
+  }
+
+  /* Swiper Slide Styling */
+  .brand-swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto !important; /* Let the logo's own width define the slide width */
+  }
+
+  .brand-swiper .swiper-slide img {
+    max-height: 50px; /* Control the max height of the brand logos */
+    width: auto;
+    object-fit: contain; /* Ensure logos scale correctly without distortion */
+  }
+</style>
+
+
 <div class="container mt-3 pt-3">
   {% include 'base/alert.html' %}
 
@@ -88,14 +150,16 @@
       <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
       <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
 
-      <!-- Brand carousel -->
-      {% comment %} <div class="brand-carousel slick-slider">
-        {% for brand in brands %}
-          <div class="brand-logo">
-            <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
-          </div>
-        {% endfor %}
-      </div> {% endcomment %}
+      <div class="swiper brand-swiper">
+        <div class="swiper-wrapper">
+          {% for brand in brands %}
+            <div class="swiper-slide">
+              <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
+            </div>
+          {% endfor %}
+        </div>
+
+      </div>
     </div>
 
     <!-- Carousel Controls -->
@@ -208,4 +272,25 @@
   </nav>
   
 </div>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const brandSwiper = new Swiper('.brand-swiper', {
+      slidesPerView: 'auto',
+      spaceBetween: 20, // Optional
+      speed: 5000, // Slower = smoother
+      allowTouchMove: true,
+
+      autoplay: {
+        delay: 0
+      },
+
+      freeMode: true,
+      freeModeMomentum: false,
+    });
+  });
+</script>
 {% endblock %}
