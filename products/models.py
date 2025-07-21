@@ -116,9 +116,8 @@ class ProductReview(BaseModel):
 class Wishlist(BaseModel):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="wishlist")
     product=models.ForeignKey(Product, on_delete=models.CASCADE, related_name="wishlisted_by")
-    size_variant=models.ForeignKey(SizeVariant, on_delete=models.SET_NULL, null=True,
-                                     blank=True, related_name="wishlist_items")
-
+    size_variant=models.ForeignKey(SizeVariant, on_delete=models.SET_NULL, null=True, blank=True, related_name="wishlist_items")
+    color_variant=models.ForeignKey(ColorVariant, on_delete=models.SET_NULL, null=True, blank=True, related_name="wishlist_items_by_color")
     added_on=models.DateTimeField(auto_now_add=True)
 
     class Meta:

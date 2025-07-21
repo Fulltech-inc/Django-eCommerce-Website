@@ -33,10 +33,8 @@
                             Size: {{ item.size_variant.size_name }}<br />
                         {% else %} Size : N/A <br />
                         {% endif %} 
-                        {% if item.product.color_variant.exists %}
-                            {% for color in item.product.color_variant.all %} 
-                              Color: {{ color.color_name }}<br />
-                            {% endfor %}
+                        {% if item.color_variant.exists %}
+                            Color: {{ item.color_variant.color_name }}<br />
                         {% else %} Color: N/A<br />
                         {% endif %} 
                         Brand: {{item.product.brand.brand_name}}

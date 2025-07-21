@@ -145,18 +145,21 @@ def delete_review(request, slug, review_uid):
 # Add a product to Wishlist
 @login_required
 def add_to_wishlist(request, uid):
-    variant = request.GET.get('size')
-    if not variant:
-        messages.warning(request, 'Please select a size variant before adding to the wishlist!')
-        return redirect(request.META.get('HTTP_REFERER'))
+    size_variant = request.GET.get('size')
+    color_variant = request.GET.get('color')
 
-    product = get_object_or_404(Product, uid=uid)
-    size_variant = get_object_or_404(SizeVariant, size_name=variant)
-    wishlist, created = Wishlist.objects.get_or_create(
-        user=request.user, product=product, size_variant=size_variant)
+    print(f"\n\nSize Variant: {size_variant}, Color Variant: {color_variant}\n\n")
+    # if not size_variant and not color_variant:
+    #     messages.warning(request, 'Please select a size and color variant before adding to the wishlist!')
+    #     return redirect(request.META.get('HTTP_REFERER'))
 
-    if created:
-        messages.success(request, "Product added to Wishlist!")
+    # product = get_object_or_404(Product, uid=uid)
+    # size_variant = get_object_or_404(SizeVariant, size_name=size_variant)
+    # wishlist, created = Wishlist.objects.get_or_create(
+    #     user=request.user, product=product, size_variant=size_variant, color_variant=color_variant)
+
+    # if created:
+    #     messages.success(request, "Product added to Wishlist!")
 
     return redirect(reverse('wishlist'))
 
@@ -196,11 +199,12 @@ def move_to_cart(request, uid):
         return redirect('wishlist')
 
     size_variant = wishlist.size_variant
+    color_variant = wishlist.color_variant
     wishlist.delete()
 
     cart, created = Cart.objects.get_or_create(user=request.user, is_paid=False)
     cart_item, created = CartItem.objects.get_or_create(
-        cart=cart, product=product, size_variant=size_variant)
+        cart=cart, product=product, size_variant=size_variant, color_variant=color_variant)
 
     if not created:
         cart_item.quantity += 1

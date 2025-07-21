@@ -138,7 +138,13 @@
               
               <dt class="col-sm-3">Color</dt>
               <dd class="col-sm-9">
-                {% for color in product.color_variant.all %} {{ color.color_name }} {% endfor %}
+                <select class="form-control" id="colorSelect" name="selected_color" onchange="get_correct_price(null, this.value); updateCartUrl();">
+                  <option value="">Select Color</option>
+                  {% for color in product.color_variant.all %}
+                    <option value="{{ color.color_name }}" {% if selected_color == color.color_name %} selected {% endif %}>{{ color.color_name }}</option>
+                  {% endfor %}
+                </select>
+
               </dd>
 
               <dt class="col-sm-3">Delivery</dt>
@@ -180,7 +186,7 @@
 
                   <label class="custom-control custom-radio custom-control-inline">
                     <input type="radio" name="selected_size" value="{{ size.size_name }}" 
-                    onchange="get_correct_price('{{ size.size_name }}'); updateCartUrl();" 
+                    onchange="get_correct_price('{{ size.size_name }}', null); updateCartUrl();" 
                     id="size-{{ size.size_name }}" 
                     {% if selected_size == size.size_name %} checked {% endif %} class="custom-control-input" />
                     <div class="custom-control-label">{{ size.size_name }}</div>
@@ -196,7 +202,7 @@
             <div class="form-group d-flex justify-content-start">
               <div class="d-sm-flex mr-2">
                 <div class="mb-2 mb-sm-0 mr-0 mr-sm-3">
-                  <form method="POST" action="{% url 'add_to_wishlist' product.uid %}?size={{ selected_size }}">
+                  <form method="POST" action="{% url 'add_to_wishlist' product.uid %}?size={{ selected_size }}&color={{ selected_color }}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-primary">
                       <i class="fas fa-heart"></i> Add to Wishlist
@@ -204,7 +210,7 @@
                   </form>
                 </div>
                 <a
-                  href="{% url 'add_to_cart' product.uid %}?size={{ selected_size }}"
+                  href="{% url 'add_to_cart' product.uid %}?size={{ selected_size }}&color={{ selected_color }}"
                   id="add-to-cart-btn"
                   class="btn btn-primary"
                 >
@@ -360,10 +366,21 @@
 </section>
 
 <script>
-  function get_correct_price(selected_size) {
+  function get_correct_price(selected_size = null, selected_color = null) {
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set("size", selected_size);
-    window.location.search = urlParams.toString();
+
+    console.log(selected_size);
+    console.log(selected_color);
+
+    if (selected_size !== null) {
+      urlParams.set("size", selected_size);
+    }
+    
+    if (selected_color !== null) {
+      urlParams.set("color", selected_color);
+    }
+
+    window.location.search = urlParams.toString(); // Reloads page
   }
 
   function updateMainImage(src) {
