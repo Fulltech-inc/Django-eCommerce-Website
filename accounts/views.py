@@ -1,7 +1,7 @@
 import os
 import json
 import uuid
-import razorpay
+from paynow import Paynow
 from weasyprint import CSS, HTML
 from products.models import *
 from django.urls import reverse
@@ -175,22 +175,74 @@ def cart(request):
             messages.success(request, 'Coupon applied successfully.')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    if cart_obj:
-        cart_total_in_paise = int(cart_obj.get_cart_total_price_after_coupon() * 100)
+    # if cart_obj:
+    #     cart_total_in_paise = int(cart_obj.get_cart_total_price_after_coupon() * 100)
 
-        if cart_total_in_paise < 100:
-            messages.warning(
-                request, 'Total amount in cart is less than the minimum required amount (1.00 INR). Please add a product to the cart.')
+    #     if cart_total_in_paise < 100:
+    #         messages.warning(
+    #             request, 'Total amount in cart is less than the minimum required amount (1.00 INR). Please add a product to the cart.')
+    #         return redirect('index')
+
+    #     client = razorpay.Client(
+    #         auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
+    #     payment = client.order.create(
+    #         {'amount': cart_total_in_paise, 'currency': 'INR', 'payment_capture': 1})
+    #     cart_obj.razorpay_order_id = payment['id']
+    #     cart_obj.save()
+
+    # context = {'cart': cart_obj, 'payment': payment, 'quantity_range': range(1, 6), }
+    # return render(request, 'accounts/cart.html', context)
+
+    # Check minimum amount before payment initiation
+
+    if cart_obj:
+        total_amount = cart_obj.get_cart_total_price_after_coupon()
+        if total_amount < 1.00:
+            messages.warning(request, 'Total amount is less than the minimum required (1.00). Please add more products to cart.')
             return redirect('index')
 
-        client = razorpay.Client(
-            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
-        payment = client.order.create(
-            {'amount': cart_total_in_paise, 'currency': 'INR', 'payment_capture': 1})
-        cart_obj.razorpay_order_id = payment['id']
-        cart_obj.save()
 
-    context = {'cart': cart_obj, 'payment': payment, 'quantity_range': range(1, 6), }
+        # Absolute URLs are preferred for external services
+        domain = request.build_absolute_uri('/')[:-1]  # Remove trailing slash
+
+        return_url = domain + reverse('success')      # Named URL pattern
+        result_url = domain + reverse('success')  # You must define this name in your urls.py
+
+
+        # Initialize PayNow client
+        paynow = Paynow(
+            settings.PAYNOW_INTEGRATION_ID,  # Your PayNow integration ID
+            settings.PAYNOW_INTEGRATION_KEY,  # Your PayNow integration key
+            return_url, 
+            result_url
+        )
+
+        # Create payment
+        payment = paynow.create_payment(
+            str(cart_obj.uid),  # Your unique reference for this payment - use cart id here
+            user.email
+        )
+
+        # Add the item (cart total) - PayNow expects amount in ZWL or USD, depending on your setup
+        payment.add(str(cart_obj), total_amount)
+
+        # Send payment to PayNow (this generates a URL user needs to visit to complete payment)
+        response = paynow.send_mobile(payment, phone='0786995112', method='ecocash')  # or 'onemoney', depending on what you want to support
+
+        if response.success:
+            # Save the poll url or payment reference for later validation or confirmation
+            cart_obj.paynow_poll_url = response.poll_url
+            cart_obj.paynow_reference = response.reference
+            cart_obj.save()
+        else:
+            messages.error(request, 'Failed to initiate payment with PayNow. Please try again.')
+            return redirect('index')
+
+    context = {
+        'cart': cart_obj,
+        'paynow_poll_url': cart_obj.paynow_poll_url,  # Use this in your template to redirect user to PayNow
+        'quantity_range': range(1, 6),
+    }
     return render(request, 'accounts/cart.html', context)
 
 
