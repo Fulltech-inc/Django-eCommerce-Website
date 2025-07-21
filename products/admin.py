@@ -34,3 +34,10 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage)
 admin.site.register(ProductBrand)
 admin.site.register(ProductReview)
+
+# ✅ Register Wishlist model
+@admin.register(Wishlist)
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'size_variant', 'color_variant', 'added_on']
+    search_fields = ['user__username', 'product__product_name']
+    list_filter = ['added_on', 'size_variant', 'color_variant']
