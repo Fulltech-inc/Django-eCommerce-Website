@@ -68,8 +68,23 @@ class Product(BaseModel):
     def __str__(self) -> str:
         return self.product_name
 
-    def get_product_price_by_size(self, size):
-        return self.price + SizeVariant.objects.get(size_name=size).price
+    def get_product_price_by_size_and_color(self, size, color):
+        price = self.price  # Start with the base product price
+
+        try:
+            size_variant = SizeVariant.objects.get(product=self, size_name=size)
+            price += size_variant.price
+        except SizeVariant.DoesNotExist:
+            pass
+
+        try:
+            color_variant = ColorVariant.objects.get(product=self, color_name=color)
+            price += color_variant.price
+        except ColorVariant.DoesNotExist:
+            pass
+
+        return price
+
 
     def get_rating(self):
         total = sum(int(review['stars']) for review in self.reviews.values())

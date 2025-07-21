@@ -141,7 +141,7 @@
                 <select class="form-control" id="colorSelect" name="selected_color" onchange="get_correct_price(null, this.value); updateCartUrl();">
                   <option value="">Select Color</option>
                   {% for color in product.color_variant.all %}
-                    <option value="{{ color.color_name }}" {% if selected_color == color.color_name %} selected {% endif %}>{{ color.color_name }}</option>
+                    <option value="{{ color.color_name }}" {% if selected_color == color.color_name|urlencode %} selected {% endif %}>{{ color.color_name }}</option>
                   {% endfor %}
                 </select>
 
@@ -188,7 +188,7 @@
                     <input type="radio" name="selected_size" value="{{ size.size_name }}" 
                     onchange="get_correct_price('{{ size.size_name }}', null); updateCartUrl();" 
                     id="size-{{ size.size_name }}" 
-                    {% if selected_size == size.size_name %} checked {% endif %} class="custom-control-input" />
+                    {% if selected_size == size.size_name|urlencode %} checked {% endif %} class="custom-control-input" />
                     <div class="custom-control-label">{{ size.size_name }}</div>
                   </label>
 
@@ -368,10 +368,7 @@
 <script>
   function get_correct_price(selected_size = null, selected_color = null) {
     const urlParams = new URLSearchParams(window.location.search);
-
-    console.log(selected_size);
-    console.log(selected_color);
-
+    
     if (selected_size !== null) {
       urlParams.set("size", selected_size);
     }

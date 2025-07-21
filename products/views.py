@@ -6,7 +6,7 @@ from accounts.models import Cart, CartItem
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from products.models import Product, SizeVariant, ProductReview, Wishlist
+from products.models import Product, SizeVariant, ColorVariant, ProductReview, Wishlist
 from home.models import HeaderBanner
 
 # Create your views here.
@@ -66,10 +66,19 @@ def get_product(request, slug):
         'in_wishlist': in_wishlist,
     }
 
-    if request.GET.get('size'):
+    if request.GET.get('size', 'color'):
         size = request.GET.get('size')
-        price = product.get_product_price_by_size(size)
-        context['selected_size'] = size
+        color = request.GET.get('color')
+        price = product.get_product_price_by_size_and_color(size, color)
+
+        print(f"\n\nsize: {size} and color, {color}\n\n")
+
+        from urllib.parse import quote
+
+        context['selected_size'] = quote(size or '')
+        context['selected_color'] = quote(color or '')
+
+        
         context['updated_price'] = price
 
     return render(request, 'product/product.html', context=context)
@@ -149,17 +158,17 @@ def add_to_wishlist(request, uid):
     color_variant = request.GET.get('color')
 
     print(f"\n\nSize Variant: {size_variant}, Color Variant: {color_variant}\n\n")
-    # if not size_variant and not color_variant:
-    #     messages.warning(request, 'Please select a size and color variant before adding to the wishlist!')
-    #     return redirect(request.META.get('HTTP_REFERER'))
+    if size_variant in [None, "", "None"] or color_variant in [None, "", "None"]:
+        messages.warning(request, 'Please select a size and color variant before adding to the wishlist!')
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
-    # product = get_object_or_404(Product, uid=uid)
-    # size_variant = get_object_or_404(SizeVariant, size_name=size_variant)
-    # wishlist, created = Wishlist.objects.get_or_create(
-    #     user=request.user, product=product, size_variant=size_variant, color_variant=color_variant)
+    product = get_object_or_404(Product, uid=uid)
+    size_variant = get_object_or_404(SizeVariant, size_name=size_variant)
+    color_variant = get_object_or_404(ColorVariant, color_name=color_variant)
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user, product=product, size_variant=size_variant, color_variant=color_variant)
 
-    # if created:
-    #     messages.success(request, "Product added to Wishlist!")
+    if created:
+        messages.success(request, "Product added to Wishlist!")
 
     return redirect(reverse('wishlist'))
 
