@@ -205,34 +205,51 @@ def cart(request):
         # Absolute URLs are preferred for external services
         domain = request.build_absolute_uri('/')[:-1]  # Remove trailing slash
 
-        return_url = domain + reverse('success')      # Named URL pattern
+        return_url = domain + reverse('cart')      # Named URL pattern
         result_url = domain + reverse('success')  # You must define this name in your urls.py
 
 
         # Initialize PayNow client
+        print("Initializing PayNow...")
+        print("Integration ID:", settings.PAYNOW_INTEGRATION_ID)
+        print("Integration Key:", settings.PAYNOW_INTEGRATION_KEY)
+        print("Return URL:", return_url)
+        print("Result URL:", result_url)
+
         paynow = Paynow(
-            settings.PAYNOW_INTEGRATION_ID,  # Your PayNow integration ID
-            settings.PAYNOW_INTEGRATION_KEY,  # Your PayNow integration key
-            return_url, 
+            settings.PAYNOW_INTEGRATION_ID,
+            settings.PAYNOW_INTEGRATION_KEY,
+            return_url,
             result_url
         )
 
         # Create payment
-        payment = paynow.create_payment(
-            str(cart_obj.uid),  # Your unique reference for this payment - use cart id here
-            user.email
-        )
+        print("Creating payment with reference:", str(cart_obj.uid), "for email:", user.email)
+        payment = paynow.create_payment(str(cart_obj.uid), user.email)
 
-        # Add the item (cart total) - PayNow expects amount in ZWL or USD, depending on your setup
+        # Add the item (amount)
+        print("Adding item to payment:", str(cart_obj), "| Amount:", total_amount)
         payment.add(str(cart_obj), total_amount)
 
-        # Send payment to PayNow (this generates a URL user needs to visit to complete payment)
-        response = paynow.send_mobile(payment, phone='0786995112', method='ecocash')  # or 'onemoney', depending on what you want to support
+        # Send payment to PayNow (mobile)
+        print("Sending mobile payment...")
+        print("Phone number: 0771111111 | Method: ecocash")
+        response = paynow.send_mobile(payment, phone=' 0771111111', method='ecocash')
+
+        # Check and print the response
+        print("PayNow response object:", response.__dict__)
+        if response.success:
+            print("✅ Payment initiated successfully.")
+            print("Redirect URL:", response.redirect_url)
+        else:
+            print("❌ Payment initiation failed.")
+            print("Error:", response.error)
+
 
         if response.success:
             # Save the poll url or payment reference for later validation or confirmation
             cart_obj.paynow_poll_url = response.poll_url
-            cart_obj.paynow_reference = response.reference
+            cart_obj.paynow_reference = payment.reference  # This is what YOU set when creating payment
             cart_obj.save()
         else:
             messages.error(request, 'Failed to initiate payment with PayNow. Please try again.')
