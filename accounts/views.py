@@ -16,12 +16,13 @@ from base.emails import send_account_activation_email
 from django.views.decorators.http import require_POST
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.shortcuts import redirect, render, get_object_or_404
 from accounts.forms import UserUpdateForm, UserProfileForm, ShippingAddressForm, CustomPasswordChangeForm
 from home.models import HeaderBanner
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -205,8 +206,10 @@ def cart(request):
         # Absolute URLs are preferred for external services
         domain = request.build_absolute_uri('/')[:-1]  # Remove trailing slash
 
-        return_url = domain + reverse('cart')      # Named URL pattern
+        return_url = domain + reverse('cart')  # Named URL pattern
         result_url = domain + reverse('success')  # You must define this name in your urls.py
+
+        print("return URL{} and result URL: {}".format(return_url, result_url))
 
 
         # Initialize PayNow client
@@ -304,18 +307,53 @@ def remove_coupon(request, cart_id):
 
 
 # Payment success view
+# def success(request):
+#     order_id = request.GET.get('order_id')
+#     cart = get_object_or_404(Cart, razorpay_order_id=order_id)
+
+#     # Mark the cart as paid
+#     cart.is_paid = True
+#     cart.save()
+
+#     # Create the order after payment is confirmed
+#     order = create_order(cart)
+
+#     context = {'order_id': order_id, 'order': order}
+#     return render(request, 'payment_success/payment_success.html', context)
+
+@csrf_exempt
 def success(request):
-    order_id = request.GET.get('order_id')
-    cart = get_object_or_404(Cart, razorpay_order_id=order_id)
+    reference = request.GET.get('reference')
+    status = request.GET.get('status')
+    paynow_ref = request.GET.get('paynowreference')
+    amount = request.GET.get('amount')
+    pollurl = request.GET.get('pollurl')
+    hash_value = request.GET.get('hash')
 
-    # Mark the cart as paid
-    cart.is_paid = True
-    cart.save()
+    print("\n\n{}, {}, {}, {}, {}, {}\n\n".format(reference, status, paynow_ref, amount, pollurl, request.method))
 
-    # Create the order after payment is confirmed
-    order = create_order(cart)
+    if not reference:
+        return HttpResponseBadRequest("Missing payment reference.")
 
-    context = {'order_id': order_id, 'order': order}
+    cart = get_object_or_404(Cart, paynow_reference=reference)
+
+    if status and status.lower() == 'paid':
+        cart.is_paid = True
+        cart.save()
+        order = create_order(cart)
+        context = {
+            'order': order,
+            'reference': reference,
+            'status': status,
+        }
+    else:
+        context = {
+            'order': None,
+            'reference': reference,
+            'status': status or "Unknown",
+            'error': "Payment may have failed or is still pending."
+        }
+
     return render(request, 'payment_success/payment_success.html', context)
 
 
