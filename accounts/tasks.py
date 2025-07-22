@@ -2,7 +2,6 @@ import threading
 import time
 import requests
 from .models import Cart, CartItem, Order, OrderItem
-from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from urllib.parse import parse_qsl
@@ -77,19 +76,8 @@ def poll_payment_status(paynow_reference):
                 print(f"[Polling] Payment confirmed for {paynow_reference}")
                 return
 
-            # if 'failed' in text or 'cancelled' in text:
-            #     order.payment_status = 'Failed'
-            #     order.save()
-            #     print(f"[Polling] Payment failed for {paynow_reference}")
-            #     return
-
         except Exception as e:
             print(f"[Polling] Error polling {paynow_reference}: {e}")
-
-    # if still pending after retries
-    # order.payment_status = 'Pending'
-    # order.save()
-    # print(f"[Polling] Payment still pending after max retries for {paynow_reference}")
 
 def start_polling_task(paynow_reference):
     """
