@@ -31,8 +31,6 @@ def create_order(cart, status):
             product_price=cart_item.get_product_price()
         )
 
-    return order
-
 def poll_payment_status(paynow_reference):
     """
     Polls Paynow’s poll_url until the payment_status changes from pending,
@@ -72,8 +70,7 @@ def poll_payment_status(paynow_reference):
                 cart.save()
 
                 # Create the order after payment is confirmed
-                order = create_order(cart, status)
-                print(f"[Polling] Payment order for {order}")
+                create_order(cart, status)
                 print(f"[Polling] Payment confirmed for {paynow_reference}")
                 break
 
