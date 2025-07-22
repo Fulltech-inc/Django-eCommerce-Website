@@ -287,22 +287,6 @@ def remove_coupon(request, cart_id):
     messages.success(request, 'Coupon Removed.')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
-# Payment success view
-# def success(request):
-#     order_id = request.GET.get('order_id')
-#     cart = get_object_or_404(Cart, razorpay_order_id=order_id)
-
-#     # Mark the cart as paid
-#     cart.is_paid = True
-#     cart.save()
-
-#     # Create the order after payment is confirmed
-#     order = create_order(cart)
-
-#     context = {'order_id': order_id, 'order': order}
-#     return render(request, 'payment_success/payment_success.html', context)
-
 @csrf_exempt
 def success(request):
     return render(request, 'payment_success/payment_success.html')

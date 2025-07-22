@@ -66,8 +66,10 @@ def poll_payment_status(paynow_reference):
             # amount = data.get('amount')
             # hash_val = data.get('hash')
 
+
+            print(f"[Polling] Status: {status}")
             # Simplest check: look for “paid” keyword
-            if status == 'Awaiting Delivery':
+            if status == 'Paid':
                 cart.is_paid = True
                 cart.save()
 
