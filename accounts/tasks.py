@@ -67,7 +67,7 @@ def poll_payment_status(paynow_reference):
             # hash_val = data.get('hash')
 
             print(f"[Polling] Status: {status}")
-            if status is 'Paid' or status is 'Awaiting Delivery':
+            if status == 'Paid' or status == 'Awaiting Delivery':
                 cart.is_paid = True
                 cart.save()
 
