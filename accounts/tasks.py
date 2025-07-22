@@ -57,6 +57,7 @@ def poll_payment_status(paynow_reference):
         try:
             response = requests.get(poll_url, timeout=10)
             text = response.text.lower()
+            print(f"[Polling] Response text {text}")
 
             # Simplest check: look for “paid” keyword
             if 'paid' in text:
