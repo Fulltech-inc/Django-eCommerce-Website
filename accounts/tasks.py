@@ -7,11 +7,11 @@ from django.http import Http404
 from urllib.parse import parse_qsl
 
 # Create an order view
-def create_order(cart):
+def create_order(cart, status):
     order, created = Order.objects.get_or_create(
         user=cart.user,
         paynow_reference=cart.paynow_reference,
-        payment_status="Paid",
+        payment_status=status,
         shipping_address=cart.user.profile.shipping_address,
         payment_mode="Paynow",
         order_total_price=cart.get_cart_total(),
@@ -66,15 +66,13 @@ def poll_payment_status(paynow_reference):
             # amount = data.get('amount')
             # hash_val = data.get('hash')
 
-
             print(f"[Polling] Status: {status}")
-            # Simplest check: look for “paid” keyword
-            if status == 'Paid':
+            if status is 'Paid' or status is 'Awaiting Delivery':
                 cart.is_paid = True
                 cart.save()
 
                 # Create the order after payment is confirmed
-                order = create_order(cart)
+                order = create_order(cart, status)
                 print(f"[Polling] Payment confirmed for {paynow_reference}")
                 return
 
