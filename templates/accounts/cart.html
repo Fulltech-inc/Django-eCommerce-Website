@@ -65,7 +65,7 @@
                 </td>
                 <td>
                   <div class="price-wrap">
-                    <var class="price">₹{{ cart_item.get_product_price }} </var>
+                    <var class="price">${{ cart_item.get_product_price }} </var>
                   </div>
                   <!-- price-wrap .// -->
                 </td>
@@ -152,18 +152,18 @@
             <dl class="dlist-align">
               <dt>Total price:</dt>
               <dd class="text-right">
-                <strong>₹{{ cart.get_cart_total }}</strong>
+                <strong>${{ cart.get_cart_total }}</strong>
               </dd>
             </dl>
             {% if cart.coupon %}
             <dl class="dlist-align">
               <dt>Discount:</dt>
-              <dd class="text-right">₹{{ cart.coupon.discount_amount }}</dd>
+              <dd class="text-right">${{ cart.coupon.discount_amount }}</dd>
             </dl>
             <dl class="dlist-align">
               <dt>Total:</dt>
               <dd class="text-right h5">
-                <strong>₹{{ cart.get_cart_total_price_after_coupon }}</strong>
+                <strong>${{ cart.get_cart_total_price_after_coupon }}</strong>
               </dd>
             </dl>
             {% endif %}
