@@ -170,7 +170,8 @@ def add_to_wishlist(request, uid):
     if created:
         messages.success(request, "Product added to Wishlist!")
 
-    return redirect(reverse('wishlist'))
+    referer = request.META.get('HTTP_REFERER', '/')
+    return redirect(referer)
 
 
 # Remove product from wishlist
@@ -220,4 +221,5 @@ def move_to_cart(request, uid):
         cart_item.save()
 
     messages.success(request, "Product moved to cart successfully!")
-    return redirect('cart')
+    referer = request.META.get('HTTP_REFERER', '/')
+    return redirect(referer)

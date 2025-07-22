@@ -134,7 +134,8 @@ def add_to_cart(request, uid):
     except Exception as e:
         messages.error(request, 'Error adding item to cart.', str(e))
 
-    return redirect(reverse('cart'))
+    referer = request.META.get('HTTP_REFERER', '/')
+    return redirect(referer)
 
 
 @login_required
