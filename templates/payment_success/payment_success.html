@@ -13,15 +13,11 @@
           </div>
           <div class="card-body text-center">
             <p>
-              Your order with Order ID: <strong>{{ order_id }} </strong> has
-              been successfully processed.
+              Your order has been successfully processed.
             </p>
-            <p>Thank you for shopping with us!</p>
+            <p>Thank you{% if request.user.is_authenticated %} <b>{{ request.user.first_name }} {{ request.user.last_name }}</b> {% endif %}for shopping with us!</p>
             <a href="{% url 'index' %}" class="btn btn-primary mt-3 mb-3 mr-3">
               Continue Shopping
-            </a>
-            <a href="{% url 'order_details' order_id=order_id %}" class="btn btn-warning">
-              View Order Details
             </a>
           </div>
         </div>

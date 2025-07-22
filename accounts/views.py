@@ -16,7 +16,7 @@ from base.emails import send_account_activation_email
 from django.views.decorators.http import require_POST
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.shortcuts import redirect, render, get_object_or_404
@@ -176,26 +176,6 @@ def cart(request):
             messages.success(request, 'Coupon applied successfully.')
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    # if cart_obj:
-    #     cart_total_in_paise = int(cart_obj.get_cart_total_price_after_coupon() * 100)
-
-    #     if cart_total_in_paise < 100:
-    #         messages.warning(
-    #             request, 'Total amount in cart is less than the minimum required amount (1.00 INR). Please add a product to the cart.')
-    #         return redirect('index')
-
-    #     client = razorpay.Client(
-    #         auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
-    #     payment = client.order.create(
-    #         {'amount': cart_total_in_paise, 'currency': 'INR', 'payment_capture': 1})
-    #     cart_obj.razorpay_order_id = payment['id']
-    #     cart_obj.save()
-
-    # context = {'cart': cart_obj, 'payment': payment, 'quantity_range': range(1, 6), }
-    # return render(request, 'accounts/cart.html', context)
-
-    # Check minimum amount before payment initiation
-
     if cart_obj:
         total_amount = cart_obj.get_cart_total_price_after_coupon()
         if total_amount < 1.00:
@@ -206,7 +186,7 @@ def cart(request):
         # Absolute URLs are preferred for external services
         domain = request.build_absolute_uri('/')[:-1]  # Remove trailing slash
 
-        return_url = domain + reverse('cart')  # Named URL pattern
+        return_url = domain + reverse('success')  # Named URL pattern
         result_url = domain + reverse('success')  # You must define this name in your urls.py
 
         # Initialize PayNow client
@@ -255,7 +235,7 @@ def cart(request):
         else:
             messages.error(request, 'Failed to initiate payment with PayNow. Please try again.')
             return redirect('index')
-
+        
     context = {
         'cart': cart_obj,
         'redirect_url': cart_obj.redirect_url,  # Use this in your template to redirect user to PayNow
@@ -320,38 +300,7 @@ def remove_coupon(request, cart_id):
 
 @csrf_exempt
 def success(request):
-    reference = request.GET.get('reference')
-    status = request.GET.get('status')
-    paynow_ref = request.GET.get('paynowreference')
-    amount = request.GET.get('amount')
-    pollurl = request.GET.get('pollurl')
-    hash_value = request.GET.get('hash')
-
-    print("\n\n{}, {}, {}, {}, {}, {}\n\n".format(reference, status, paynow_ref, amount, pollurl, request.method))
-
-    if not reference:
-        return HttpResponseBadRequest("Missing payment reference.")
-
-    cart = get_object_or_404(Cart, paynow_reference=reference)
-
-    if status and status.lower() == 'paid':
-        cart.is_paid = True
-        cart.save()
-        order = create_order(cart)
-        context = {
-            'order': order,
-            'reference': reference,
-            'status': status,
-        }
-    else:
-        context = {
-            'order': None,
-            'reference': reference,
-            'status': status or "Unknown",
-            'error': "Payment may have failed or is still pending."
-        }
-
-    return render(request, 'payment_success/payment_success.html', context)
+    return render(request, 'payment_success/payment_success.html')
 
 
 # HTML to PDF Conversion
