@@ -232,9 +232,8 @@ def cart(request):
         payment.add(str(cart_obj), total_amount)
 
         # Send payment to PayNow (mobile)
-        print("Sending mobile payment...")
-        print("Phone number: 0771111111 | Method: ecocash")
-        response = paynow.send_mobile(payment, phone=' 0771111111', method='ecocash')
+        print("Sending web-based payment...")
+        response = paynow.send(payment)
 
         # Check and print the response
         print("PayNow response object:", response.__dict__)
@@ -248,7 +247,9 @@ def cart(request):
 
         if response.success:
             # Save the poll url or payment reference for later validation or confirmation
+            cart_obj.hash = response.data['hash']
             cart_obj.paynow_poll_url = response.poll_url
+            cart_obj.redirect_url = response.redirect_url
             cart_obj.paynow_reference = payment.reference  # This is what YOU set when creating payment
             cart_obj.save()
         else:
@@ -257,7 +258,7 @@ def cart(request):
 
     context = {
         'cart': cart_obj,
-        'paynow_poll_url': cart_obj.paynow_poll_url,  # Use this in your template to redirect user to PayNow
+        'redirect_url': cart_obj.redirect_url,  # Use this in your template to redirect user to PayNow
         'quantity_range': range(1, 6),
     }
     return render(request, 'accounts/cart.html', context)

@@ -51,7 +51,7 @@
                           Color: N/A<br />
                         {% endif %} 
 
-                        Brand: Nike
+                        Brand: {{cart_item.product.brand.brand_name}}
                       </p>
                     </figcaption>
                   </figure>
@@ -90,8 +90,8 @@
           </table>
 
           <div class="card-body border-top">
-            {% if paynow_poll_url %}
-              <a href="{{ paynow_poll_url }}" target="_blank" class="btn btn-primary float-md-right">
+            {% if redirect_url %}
+              <a href="{{ redirect_url }}" target="_blank" class="btn btn-primary float-md-right">
                 Pay Now <i class="fa fa-chevron-right"></i>
               </a>
             {% else %}
