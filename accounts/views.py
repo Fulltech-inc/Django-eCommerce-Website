@@ -209,9 +209,6 @@ def cart(request):
         return_url = domain + reverse('cart')  # Named URL pattern
         result_url = domain + reverse('success')  # You must define this name in your urls.py
 
-        print("return URL{} and result URL: {}".format(return_url, result_url))
-
-
         # Initialize PayNow client
         print("Initializing PayNow...")
         print("Integration ID:", settings.PAYNOW_INTEGRATION_ID)
