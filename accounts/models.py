@@ -91,7 +91,7 @@ class CartItem(BaseModel):
 
 class Order(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    order_id = models.CharField(max_length=100, unique=True)
+    paynow_reference = models.CharField(max_length=100, unique=True)
     order_date = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(max_length=100)
     shipping_address = models.TextField(blank=True, null=True)
@@ -101,7 +101,7 @@ class Order(BaseModel):
     grand_total = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"Order {self.order_id} by {self.user.username}"
+        return f"Paynow reference {self.paynow_reference} by {self.user.username}"
     
     def get_order_total_price(self):
         return self.order_total_price

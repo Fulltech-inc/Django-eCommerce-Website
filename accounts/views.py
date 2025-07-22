@@ -23,6 +23,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from accounts.forms import UserUpdateForm, UserProfileForm, ShippingAddressForm, CustomPasswordChangeForm
 from home.models import HeaderBanner
 from django.views.decorators.csrf import csrf_exempt
+from .tasks import start_polling_task
 
 
 # Create your views here.
@@ -232,6 +233,10 @@ def cart(request):
             cart_obj.redirect_url = response.redirect_url
             cart_obj.paynow_reference = payment.reference  # This is what YOU set when creating payment
             cart_obj.save()
+
+            # start polling in the background
+            start_polling_task(payment.reference)
+
         else:
             messages.error(request, 'Failed to initiate payment with PayNow. Please try again.')
             return redirect('index')
