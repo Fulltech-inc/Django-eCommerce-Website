@@ -5,6 +5,7 @@ from .models import Cart, CartItem, Order, OrderItem
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from urllib.parse import parse_qsl
 
 # Create an order view
 def create_order(cart):
@@ -56,11 +57,18 @@ def poll_payment_status(paynow_reference):
 
         try:
             response = requests.get(poll_url, timeout=10)
-            text = response.text.lower()
-            print(f"[Polling] Response text {text}")
+            raw = response.text  # e.g. "reference=...&paynowreference=...&amount=...&status=..."
+            data = dict(parse_qsl(raw))
+
+            status = data.get('status')
+            # poll_url = data.get('pollurl')
+            # reference = data.get('reference')
+            # paynow_ref = data.get('paynowreference')
+            # amount = data.get('amount')
+            # hash_val = data.get('hash')
 
             # Simplest check: look for “paid” keyword
-            if 'paid' in text:
+            if status == 'Awaiting Delivery':
                 cart.is_paid = True
                 cart.save()
 
