@@ -314,6 +314,8 @@ def render_to_pdf(template_src, context_dict={}):
     html = template.render(context_dict)
 
     static_root = settings.STATIC_ROOT
+
+    print(f"\n\nDownload PDF root{static_root}\n\n")
     css_files = [
         os.path.join(static_root, 'css', 'bootstrap.css'),
         os.path.join(static_root, 'css', 'responsive.css'),
@@ -323,7 +325,7 @@ def render_to_pdf(template_src, context_dict={}):
     pdf_file = HTML(string=html).write_pdf(stylesheets=css_objects)
 
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="invoice_{context_dict["order"].order_id}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="invoice_{context_dict["order"].paynow_reference}.pdf"'
     return response
 
 
