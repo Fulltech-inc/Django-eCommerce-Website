@@ -43,15 +43,17 @@
                           Size : N/A <br />
                         {% endif %} 
                         
-                        {% if cart_item.product.color_variant.exists %}
-                          {% for color in cart_item.product.color_variant.all %}
-                            Color: {{ color.color_name }}<br />
-                          {% endfor %}
+                        {% if cart_item.color_variant.color_name %}
+                          Color: {{cart_item.color_variant.color_name}}<br />
                         {% else %}
                           Color: N/A<br />
-                        {% endif %} 
+                        {% endif %}
 
-                        Brand: {{cart_item.product.brand.brand_name}}
+                        {% if cart_item.product.brand.brand_name %}
+                          Brand: {{cart_item.product.brand.brand_name}}
+                        {% else %}
+                          Brand: N/A<br />
+                        {% endif %}
                       </p>
                     </figcaption>
                   </figure>
