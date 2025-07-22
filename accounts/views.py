@@ -327,8 +327,8 @@ def render_to_pdf(template_src, context_dict={}):
     return response
 
 
-def download_invoice(request, order_id):
-    order = Order.objects.filter(order_id=order_id).first()
+def download_invoice(request, paynow_reference):
+    order = Order.objects.filter(paynow_reference=paynow_reference).first()
     order_items = order.order_items.all()
 
     context = {
@@ -418,39 +418,10 @@ def order_history(request):
     orders = Order.objects.filter(user=request.user).order_by('-order_date')
     return render(request, 'accounts/order_history.html', {'orders': orders, "banners": banners})
 
-
-# Create an order view
-def create_order(cart):
-    order, created = Order.objects.get_or_create(
-        user=cart.user,
-        order_id=cart.razorpay_order_id,
-        payment_status="Paid",
-        shipping_address=cart.user.profile.shipping_address,
-        payment_mode="Razorpay",
-        order_total_price=cart.get_cart_total(),
-        coupon=cart.coupon,
-        grand_total=cart.get_cart_total_price_after_coupon(),
-    )
-
-    # Create OrderItem instances for each item in the cart
-    cart_items = CartItem.objects.filter(cart=cart)
-    for cart_item in cart_items:
-        OrderItem.objects.get_or_create(
-            order=order,
-            product=cart_item.product,
-            size_variant=cart_item.size_variant,
-            color_variant=cart_item.color_variant,
-            quantity=cart_item.quantity,
-            product_price=cart_item.get_product_price()
-        )
-
-    return order
-
-
 # Order Details view
 @login_required
-def order_details(request, order_id):
-    order = get_object_or_404(Order, order_id=order_id, user=request.user)
+def order_details(request, paynow_reference):
+    order = get_object_or_404(Order, paynow_reference=paynow_reference, user=request.user)
     order_items = OrderItem.objects.filter(order=order)
     context = {
         'order': order,

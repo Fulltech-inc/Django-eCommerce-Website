@@ -41,8 +41,8 @@ urlpatterns = [
 
     # Order history and details urls
     path('order-history/', order_history, name='order_history'),
-    path('order-details/<str:order_id>/', order_details, name='order_details'),
-    path('order-details/<str:order_id>/download/', download_invoice, name='download_invoice'),
+    path('order-details/<str:paynow_reference>/', order_details, name='order_details'),
+    path('order-details/<str:paynow_reference>/download/', download_invoice, name='download_invoice'),
 
     # Delete user account url
     path('delete-account/', delete_account, name='delete_account'),
