@@ -8,7 +8,7 @@ from urllib.parse import parse_qsl
 
 # Create an order view
 def create_order(cart, status):
-    order = Order.objects.get_or_create(
+    order, created = Order.objects.get_or_create(
         user=cart.user,
         paynow_reference=cart.paynow_reference,
         payment_status=status,
@@ -30,6 +30,8 @@ def create_order(cart, status):
             quantity=cart_item.quantity,
             product_price=cart_item.get_product_price()
         )
+    
+    return order
 
 def poll_payment_status(paynow_reference):
     """
@@ -70,7 +72,7 @@ def poll_payment_status(paynow_reference):
                 cart.save()
 
                 # Create the order after payment is confirmed
-                create_order(cart, status)
+                order = create_order(cart, status)
                 print(f"[Polling] Payment confirmed for {paynow_reference}")
                 break
 
