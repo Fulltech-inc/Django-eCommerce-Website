@@ -38,43 +38,55 @@ def poll_payment_status(paynow_reference):
     Polls Paynow’s poll_url until the payment_status changes from pending,
     then updates your Order.payment_status and order creation if needed.
     """
+    # Indicate polling has begun in background
+    print(f"[Polling] Background polling started for reference: {paynow_reference}")
+
     try:
         cart = get_object_or_404(Cart, paynow_reference=paynow_reference)
     except Http404:
+        print(f"[Polling] No order found for reference: {paynow_reference}")
         return
 
     # You saved the poll_url in Order.shipping_address or another field?
     poll_url = cart.paynow_poll_url  # ← replace with actual poll_url field!
 
-    for _ in range(6):  # retry for up to 3 minutes (6 × 30s)
+    for attempt in range(6):  # retry for up to 3 minutes (6 × 30s)
+        print(f"[Polling] Attempt {attempt + 1}/6 for {paynow_reference}")
         time.sleep(30)
 
         try:
-            resp = requests.get(poll_url, timeout=10)
-            data = resp.json() if 'application/json' in resp.headers.get('Content-Type','') else resp.text
+            response = requests.get(poll_url, timeout=10)
+            text = response.text.lower()
 
             # Simplest check: look for “paid” keyword
-            if 'paid' in resp.text.lower():
+            if 'paid' in text:
                 cart.is_paid = True
                 cart.save()
 
                 # Create the order after payment is confirmed
                 order = create_order(cart)
+                print(f"[Polling] Payment confirmed for {paynow_reference}")
                 return
 
-            # if 'failed' in resp.text.lower() or 'cancelled' in resp.text.lower():
+            # if 'failed' in text or 'cancelled' in text:
             #     order.payment_status = 'Failed'
             #     order.save()
+            #     print(f"[Polling] Payment failed for {paynow_reference}")
             #     return
 
         except Exception as e:
-            print(f"[poll error for {paynow_reference}]:", e)
+            print(f"[Polling] Error polling {paynow_reference}: {e}")
 
     # if still pending after retries
     # order.payment_status = 'Pending'
     # order.save()
+    # print(f"[Polling] Payment still pending after max retries for {paynow_reference}")
 
 def start_polling_task(paynow_reference):
+    """
+    Starts a daemon thread to poll payment status in the background.
+    """
+    print(f"[Polling] Starting background thread for {paynow_reference}")
     t = threading.Thread(target=poll_payment_status, args=(paynow_reference,))
     t.daemon = True
     t.start()
