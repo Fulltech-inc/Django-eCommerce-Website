@@ -73,8 +73,9 @@ def poll_payment_status(paynow_reference):
 
                 # Create the order after payment is confirmed
                 order = create_order(cart, status)
+                print(f"[Polling] Payment order for {order}")
                 print(f"[Polling] Payment confirmed for {paynow_reference}")
-                return
+                break
 
         except Exception as e:
             print(f"[Polling] Error polling {paynow_reference}: {e}")
