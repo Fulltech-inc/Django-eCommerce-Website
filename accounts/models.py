@@ -77,13 +77,13 @@ class CartItem(BaseModel):
     quantity = models.IntegerField(default=1)
 
     def get_product_price(self):
-        price = self.product.price * self.quantity
+        price = ( self.product.price + self.color_variant.price + self.size_variant.price ) * self.quantity
 
-        if self.color_variant:
-            price += self.color_variant.price
+        # if self.color_variant:
+        #     price += self.color_variant.price
             
-        if self.size_variant:
-            price += self.size_variant.price
+        # if self.size_variant:
+        #     price += self.size_variant.price
         
         return price
 
