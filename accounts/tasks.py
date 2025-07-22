@@ -8,7 +8,7 @@ from urllib.parse import parse_qsl
 
 # Create an order view
 def create_order(cart, status):
-    order, created = Order.objects.get_or_create(
+    order = Order.objects.get_or_create(
         user=cart.user,
         paynow_reference=cart.paynow_reference,
         payment_status=status,
