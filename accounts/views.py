@@ -84,7 +84,7 @@ def register_page(request):
         profile.email_token = str(uuid.uuid4())
         profile.save()
 
-        send_account_activation_email(email, profile.email_token)
+        send_account_activation_email(email, first_name, last_name, profile.email_token)
         messages.success(request, "An email has been sent to your mail.")
         return HttpResponseRedirect(request.path_info)
 

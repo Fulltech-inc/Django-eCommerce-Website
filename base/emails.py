@@ -3,14 +3,14 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 
-def send_account_activation_email(email, email_token):
+def send_account_activation_email(email, first_name, last_name, email_token):
     subject = "Your account needs to be verified"
     email_from = settings.DEFAULT_FROM_EMAIL
 
     activation_link = f'http://192.168.1.3:8000/accounts/activate/{email_token}'
 
     html_message = render_to_string(
-        'emails/account_activation.html', {'activation_link': activation_link})
+        'emails/account_activation.html', {'activation_link': activation_link, 'first_name':first_name, 'last_name':last_name})
     plain_message = f'Hi, please verify your account by clicking the link: {activation_link}'
 
     send_mail(
