@@ -91,7 +91,7 @@
     width: 100%;
     overflow: hidden;
     height: 160px; /* Set a fixed height for the brand logo area */
-    pointer-events: none; /* Let clicks go through by default */
+    pointer-events: auto; /* Allow interaction if needed, though autoplay is on */
 
     background: #ffffff;
     background: -webkit-linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
@@ -102,7 +102,6 @@
 
   /* Swiper Slide Styling */
   .brand-swiper .swiper-slide {
-    pointer-events: auto; /* Allow interaction if needed, though autoplay is on */
     display: flex;
     justify-content: center;
     align-items: center;
