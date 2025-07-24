@@ -68,26 +68,30 @@
     font-size: 1.1rem;
   }
 
-  .brands-title {
-    color: #fff;
-    text-decoration: underline;
-    text-decoration-thickness: 5px; /* Adjust thickness */
-    font-size: 28px; /* Adjust font size */
-    font-weight: 700; /* Adjust thickness: 100–900 (400 = normal, 700 = bold) */
-  }
+
 
 </style>
 
 <style>
   /* Swiper Container Styling */
+
+  .brands-title {
+    color: #fff;
+    font-size: 24px; /* Adjust font size */
+    font-weight: 700; /* Adjust thickness: 100–900 (400 = normal, 700 = bold) */
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+    border-radius: 10px; /* adjust corner roundness */
+    padding: 10px;
+  }
+
   .brand-swiper {
     position: absolute;
     bottom: 0; /* Position at the bottom of the overlay */
     left: 0;
     width: 100%;
     overflow: hidden;
-    height: 120px; /* Set a fixed height for the brand logo area */
-    pointer-events: auto; /* Allow interaction if needed, though autoplay is on */
+    height: 160px; /* Set a fixed height for the brand logo area */
+    pointer-events: none; /* Let clicks go through by default */
 
     background: #ffffff;
     background: -webkit-linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
@@ -98,14 +102,16 @@
 
   /* Swiper Slide Styling */
   .brand-swiper .swiper-slide {
+    pointer-events: auto; /* Allow interaction if needed, though autoplay is on */
     display: flex;
     justify-content: center;
     align-items: center;
     width: auto !important; /* Let the logo's own width define the slide width */
+    height: fit-content;
   }
 
   .brand-swiper .swiper-slide img {
-    max-height: 80px; /* Control the max height of the brand logos */
+    max-height: 60px; /* Control the max height of the brand logos */
     width: auto;
     object-fit: contain; /* Ensure logos scale correctly without distortion */
     filter: drop-shadow(0px 0px 7px rgba(0, 0, 0, 0.5)); /* 0.5 = 50% opacity */
@@ -130,10 +136,13 @@
     <div class="carousel-overlay">
       <img src="{% static 'images/white_village_tech_logo.png' %}" alt="Shop Logo" class="logo">
       <a href="#shop-section" class="btn btn-primary btn-shop">Shop</a>
-      <label for="brand-swiper" class="brands-title mt-5">Brands</label>
+      
 
-      <div name="brand-swiper" class="swiper brand-swiper">
-        <div class="swiper-wrapper">
+      <div class="swiper brand-swiper">
+
+        <label for="swiper-wrapper" class="brands-title mb-4">Top Brands</label>
+
+        <div name="swiper-wrapper" class="swiper-wrapper">
           {% for brand in brands %}
             <div class="swiper-slide">
               <img src="/media/{{ brand.image }}" alt="{{ brand.name }}">
@@ -142,6 +151,7 @@
         </div>
 
       </div>
+
     </div>
 
     <!-- Carousel Controls -->
