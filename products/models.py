@@ -137,7 +137,7 @@ class Wishlist(BaseModel):
     added_on=models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together=('user', 'product', 'size_variant')
+        unique_together=('user', 'product', 'size_variant', 'color_variant')
 
     def __str__(self) -> str:
         return f'{self.user.username} - {self.product.product_name} - {self.size_variant.size_name if self.size_variant else "No Size"}'
