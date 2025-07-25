@@ -69,14 +69,16 @@ def get_product(request, slug):
     if request.GET.get('size', 'color'):
         size = request.GET.get('size')
         color = request.GET.get('color')
-        price = product.get_product_price_by_size_and_color(size, color)
+        quantity = request.GET.get('quantity')
+        price = product.get_product_price(size, color, quantity)
 
-        print(f"\n\nsize: {size} and color, {color}\n\n")
+        print(f"\n\nsize: {size}, color: {color}, and quantity: {quantity}\n\n")
 
         from urllib.parse import quote
 
         context['selected_size'] = quote(size or '')
         context['selected_color'] = quote(color or '')
+        context['selected_quantity'] = quote(quantity or '')
 
         
         context['updated_price'] = price
@@ -156,8 +158,9 @@ def delete_review(request, slug, review_uid):
 def add_to_wishlist(request, uid):
     size_variant = request.GET.get('size')
     color_variant = request.GET.get('color')
+    quantity = request.GET.get('quantity')
 
-    print(f"\n\nSize Variant: {size_variant}, Color Variant: {color_variant}\n\n")
+    print(f"\n\nSize Variant: {size_variant}, Color Variant: {color_variant}, Quantity: {quantity}\n\n")
     if size_variant in [None, "", "None"] or color_variant in [None, "", "None"]:
         messages.warning(request, 'Please select a size and color variant before adding to the wishlist!')
         return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -165,7 +168,14 @@ def add_to_wishlist(request, uid):
     product = get_object_or_404(Product, uid=uid)
     size_variant = get_object_or_404(SizeVariant, size_name=size_variant)
     color_variant = get_object_or_404(ColorVariant, color_name=color_variant)
-    wishlist, created = Wishlist.objects.get_or_create(user=request.user, product=product, size_variant=size_variant, color_variant=color_variant)
+
+    wishlist, created = Wishlist.objects.get_or_create(
+        user=request.user, 
+        product=product, 
+        size_variant=size_variant, 
+        color_variant=color_variant,
+        quantity=quantity
+        )
 
     if created:
         messages.success(request, "Product added to Wishlist!")

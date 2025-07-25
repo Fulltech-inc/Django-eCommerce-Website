@@ -202,7 +202,7 @@
             <div class="form-group d-flex justify-content-start">
               <div class="d-sm-flex mr-2">
                 <div class="mb-2 mb-sm-0 mr-0 mr-sm-3">
-                  <form method="POST" action="{% url 'add_to_wishlist' product.uid %}?size={{ selected_size }}&color={{ selected_color }}">
+                  <form method="POST" action="{% url 'add_to_wishlist' product.uid %}?size={{ selected_size }}&color={{ selected_color }}&quantity={{selected_quantity}}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-primary">
                       <i class="fas fa-heart"></i> Add to Wishlist
@@ -210,7 +210,7 @@
                   </form>
                 </div>
                 <a
-                  href="{% url 'add_to_cart' product.uid %}?size={{ selected_size }}&color={{ selected_color }}"
+                  href="{% url 'add_to_cart' product.uid %}?size={{ selected_size }}&color={{ selected_color }}&quantity={{selected_quantity}}"
                   id="add-to-cart-btn"
                   class="btn btn-primary"
                 >
@@ -366,7 +366,7 @@
 </section>
 
 <script>
-  function get_correct_price(selected_size = null, selected_color = null) {
+  function get_correct_price(selected_size = null, selected_color = null, selected_quantity = null) {
     const urlParams = new URLSearchParams(window.location.search);
     
     if (selected_size !== null) {
@@ -375,6 +375,10 @@
     
     if (selected_color !== null) {
       urlParams.set("color", selected_color);
+    }
+
+    if (selected_quantity !== null) {
+      urlParams.set("quantity", selected_quantity);
     }
 
     window.location.search = urlParams.toString(); // Reloads page
@@ -447,11 +451,15 @@
 
   btnPlus.addEventListener('click', () => {
     input.value = parseInt(input.value) + 1;
+    get_correct_price(null, null, input.value); updateCartUrl();
   });
 
   btnMinus.addEventListener('click', () => {
     let val = parseInt(input.value);
-    if (val > 1) input.value = val - 1;
+    if (val > 1) {
+      input.value = val - 1;
+      get_correct_price(null, null, input.value); updateCartUrl();
+    };
   });
 </script>
 
