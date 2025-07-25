@@ -440,4 +440,19 @@
   });
 </script>
 
+<script>
+  const input = document.querySelector('.input-spinner input');
+  const btnPlus = document.getElementById('button-plus');
+  const btnMinus = document.getElementById('button-minus');
+
+  btnPlus.addEventListener('click', () => {
+    input.value = parseInt(input.value) + 1;
+  });
+
+  btnMinus.addEventListener('click', () => {
+    let val = parseInt(input.value);
+    if (val > 1) input.value = val - 1;
+  });
+</script>
+
 {% endblock %}
