@@ -171,11 +171,17 @@ def add_to_wishlist(request, uid):
         user=request.user, 
         product=product, 
         size_variant=size_variant, 
-        color_variant=color_variant,
-        quantity=quantity if quantity and int(quantity) >= 0 else 1
+        color_variant=color_variant
         )
+    
+    if not created:
+        wishlist.quantity += int(quantity) if quantity and int(quantity) >= 0 else 1
+        wishlist.save()
+        messages.success(request, "Product quantity updated in Wishlist!")
 
     if created:
+        wishlist.quantity=quantity if quantity and int(quantity) >= 0 else 1
+        wishlist.save()
         messages.success(request, "Product added to Wishlist!")
 
     referer = request.META.get('HTTP_REFERER', '/')
@@ -223,12 +229,21 @@ def move_to_cart(request, uid):
 
     cart, created = Cart.objects.get_or_create(user=request.user, is_paid=False)
     cart_item, created = CartItem.objects.get_or_create(
-        cart=cart, product=product, size_variant=size_variant, color_variant=color_variant, quantity=quantity)
+        cart=cart,
+        product=product,
+        size_variant=size_variant,
+        color_variant=color_variant
+        )
 
     if not created:
-        cart_item.quantity += quantity
+        cart_item.quantity += int(quantity) if quantity and int(quantity) >= 0 else 1
         cart_item.save()
+        messages.success(request, 'Item quantity updated in cart successfully.')
 
-    messages.success(request, "Product moved to cart successfully!")
+    if created:
+        cart_item.quantity=quantity if quantity and int(quantity) >= 0 else 1
+        cart_item.save()
+        messages.success(request, "Product moved to cart successfully!")
+
     referer = request.META.get('HTTP_REFERER', '/')
     return redirect(referer)

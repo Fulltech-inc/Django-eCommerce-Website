@@ -133,7 +133,7 @@ class Wishlist(BaseModel):
     product=models.ForeignKey(Product, on_delete=models.CASCADE, related_name="wishlisted_by")
     size_variant=models.ForeignKey(SizeVariant, on_delete=models.SET_NULL, null=True, blank=True, related_name="wishlist_items")
     color_variant=models.ForeignKey(ColorVariant, on_delete=models.SET_NULL, null=True, blank=True, related_name="wishlist_items_by_color")
-    quantity = models.IntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1)
     added_on=models.DateTimeField(auto_now_add=True)
 
     class Meta:

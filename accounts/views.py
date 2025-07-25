@@ -128,14 +128,17 @@ def add_to_cart(request, uid):
             cart=cart, 
             product=product, 
             size_variant=size_variant, 
-            color_variant=color_variant, 
-            quantity=quantity if quantity and int(quantity) >= 0 else 1
+            color_variant=color_variant
             )
         if not created:
-            cart_item.quantity += quantity
+            cart_item.quantity += int(quantity) if quantity and int(quantity) >= 0 else 1
             cart_item.save()
+            messages.success(request, 'Item quantity updated in cart successfully.')
 
-        messages.success(request, 'Item added to cart successfully.')
+        if created:
+            cart_item.quantity=quantity if quantity and int(quantity) >= 0 else 1
+            cart_item.save()
+            messages.success(request, 'Item added to cart successfully.')
 
     except Exception as e:
         messages.error(request, 'Error adding item to cart.', str(e))

@@ -75,7 +75,7 @@ class CartItem(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     color_variant = models.ForeignKey(ColorVariant, on_delete=models.SET_NULL, null=True, blank=True)
     size_variant = models.ForeignKey(SizeVariant, on_delete=models.SET_NULL, null=True, blank=True)
-    quantity = models.IntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=1)
 
     def get_product_price(self):
         price = ( self.product.price + self.color_variant.price + self.size_variant.price ) * self.quantity
