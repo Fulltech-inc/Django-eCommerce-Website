@@ -114,6 +114,7 @@ def add_to_cart(request, uid):
     try:
         size_variant = request.GET.get('size')
         color_variant = request.GET.get('color')
+        quantity = request.GET.get('quantity')
         if size_variant in [None, "", "None"] or color_variant in [None, "", "None"]:
             messages.warning(request, 'Please select a size and color variant before adding to the cart!')
             return redirect(request.META.get('HTTP_REFERER'))
@@ -124,9 +125,14 @@ def add_to_cart(request, uid):
         color_variant = get_object_or_404(ColorVariant, color_name=color_variant)
 
         cart_item, created = CartItem.objects.get_or_create(
-            cart=cart, product=product, size_variant=size_variant, color_variant=color_variant)
+            cart=cart, 
+            product=product, 
+            size_variant=size_variant, 
+            color_variant=color_variant, 
+            quantity=quantity if quantity and int(quantity) >= 0 else 1
+            )
         if not created:
-            cart_item.quantity += 1
+            cart_item.quantity += quantity
             cart_item.save()
 
         messages.success(request, 'Item added to cart successfully.')

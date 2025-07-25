@@ -79,8 +79,6 @@ def get_product(request, slug):
         context['selected_size'] = quote(size or '')
         context['selected_color'] = quote(color or '')
         context['selected_quantity'] = quote(quantity or '')
-
-        
         context['updated_price'] = price
 
     return render(request, 'product/product.html', context=context)
@@ -174,7 +172,7 @@ def add_to_wishlist(request, uid):
         product=product, 
         size_variant=size_variant, 
         color_variant=color_variant,
-        quantity=quantity if quantity and quantity >= 0 else 1
+        quantity=quantity if quantity and int(quantity) >= 0 else 1
         )
 
     if created:
@@ -220,14 +218,15 @@ def move_to_cart(request, uid):
 
     size_variant = wishlist.size_variant
     color_variant = wishlist.color_variant
+    quantity = wishlist.quantity
     wishlist.delete()
 
     cart, created = Cart.objects.get_or_create(user=request.user, is_paid=False)
     cart_item, created = CartItem.objects.get_or_create(
-        cart=cart, product=product, size_variant=size_variant, color_variant=color_variant)
+        cart=cart, product=product, size_variant=size_variant, color_variant=color_variant, quantity=1)
 
     if not created:
-        cart_item.quantity += 1
+        cart_item.quantity += quantity
         cart_item.save()
 
     messages.success(request, "Product moved to cart successfully!")
