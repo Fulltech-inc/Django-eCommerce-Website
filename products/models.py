@@ -83,7 +83,7 @@ class Product(BaseModel):
         except ColorVariant.DoesNotExist:
             pass
 
-        return price * int(quantity) if quantity else price
+        return price * int(quantity) if quantity and quantity >= 0 else price
 
 
     def get_rating(self):
