@@ -223,7 +223,7 @@ def move_to_cart(request, uid):
 
     cart, created = Cart.objects.get_or_create(user=request.user, is_paid=False)
     cart_item, created = CartItem.objects.get_or_create(
-        cart=cart, product=product, size_variant=size_variant, color_variant=color_variant, quantity=1)
+        cart=cart, product=product, size_variant=size_variant, color_variant=color_variant, quantity=quantity)
 
     if not created:
         cart_item.quantity += quantity
