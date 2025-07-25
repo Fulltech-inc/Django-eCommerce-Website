@@ -59,11 +59,7 @@
                   </figure>
                 </td>
                 <td>
-                  <select class="form-control" onchange="updateCartItem(this, '{{ cart_item.uid }}')">
-                    {% for i in quantity_range %}
-                      <option value="{{ i }}" {% if cart_item.quantity == i %}selected{% endif %}>{{ i }}</option>
-                    {% endfor %}
-                  </select>
+                  <input class="form-control" type="number" onchange="updateCartItem(this, '{{ cart_item.uid }}')" value="{{cart_item.quantity}}" />
                 </td>
                 <td>
                   <div class="price-wrap">

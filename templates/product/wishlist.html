@@ -37,6 +37,10 @@
                             Color: {{ item.color_variant.color_name }}<br />
                         {% else %} Color: N/A<br />
                         {% endif %} 
+                        {% if item.quantity %}
+                            Quantity: {{ item.quantity }}<br />
+                        {% else %} Quantity: N/A<br />
+                        {% endif %} 
                         Brand: {{item.product.brand.brand_name}}
                       </p>
                       <td class="d-flex justify-content-end">
