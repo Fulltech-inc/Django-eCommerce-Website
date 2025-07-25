@@ -79,13 +79,6 @@ class CartItem(BaseModel):
 
     def get_product_price(self):
         price = ( self.product.price + self.color_variant.price + self.size_variant.price ) * self.quantity
-
-        # if self.color_variant:
-        #     price += self.color_variant.price
-            
-        # if self.size_variant:
-        #     price += self.size_variant.price
-        
         return price
 
 

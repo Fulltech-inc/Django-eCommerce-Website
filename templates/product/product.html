@@ -165,7 +165,7 @@
                       +
                     </button>
                   </div>
-                  <input type="text" class="form-control" value="1" />
+                  <input type="text" class="form-control" value="{% if selected_quantity %}{{selected_quantity}}{% else %}1{% endif %}" />
                   <div class="input-group-append">
                     <button
                       class="btn btn-light"
