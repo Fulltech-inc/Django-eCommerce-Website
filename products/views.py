@@ -174,7 +174,7 @@ def add_to_wishlist(request, uid):
         product=product, 
         size_variant=size_variant, 
         color_variant=color_variant,
-        quantity=quantity if quantity else 1
+        quantity=quantity if quantity or quantity <= 0 else 1
         )
 
     if created:
