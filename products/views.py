@@ -162,7 +162,7 @@ def add_to_wishlist(request, uid):
 
     print(f"\n\nSize Variant: {size_variant}, Color Variant: {color_variant}, Quantity: {quantity}\n\n")
     if size_variant in [None, "", "None"] or color_variant in [None, "", "None"]:
-        messages.warning(request, 'Please select a size and color variant before adding to the wishlist!')
+        messages.warning(request, 'Please select size, color, and quantity before adding to the wishlist!')
         return redirect(request.META.get('HTTP_REFERER', '/'))
 
     product = get_object_or_404(Product, uid=uid)
@@ -174,7 +174,7 @@ def add_to_wishlist(request, uid):
         product=product, 
         size_variant=size_variant, 
         color_variant=color_variant,
-        quantity=quantity
+        quantity=quantity if quantity else 1
         )
 
     if created:

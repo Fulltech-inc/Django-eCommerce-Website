@@ -148,7 +148,7 @@
               </dd>
 
               <dt class="col-sm-3">Delivery</dt>
-              <dd class="col-sm-9">All over the World!</dd>
+              <dd class="col-sm-9">All over Zimbabwe!</dd>
             </dl>
 
             <hr />
@@ -460,6 +460,13 @@
       input.value = val - 1;
       get_correct_price(null, null, input.value); updateCartUrl();
     };
+  });
+
+  input.addEventListener('change', () => {
+    const qty = Math.max(1, parseInt(input.value, 10) || 1);
+    input.value = qty; // normalize
+    get_correct_price(null, null, qty);
+    updateCartUrl();
   });
 </script>
 
