@@ -5,6 +5,7 @@ from django.db import models
 from django import forms
 from django_countries.fields import CountryField
 from django.utils.html import mark_safe
+from django_cryptography.fields import encrypt
 
 # avdertisement models
 class Billboards(BaseModel):
@@ -58,3 +59,10 @@ class ShippingAddressForm(forms.ModelForm):
             'country',
             'phone'
         ]
+
+            
+class OpenAIApikeyBucket(models.Model):
+    api_key_name= models.CharField(max_length=100)
+    api_key= encrypt(models.CharField(max_length=200))
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)

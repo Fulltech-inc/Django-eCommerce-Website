@@ -5,7 +5,6 @@ from base.models import BaseModel
 from products.models import Product, ColorVariant, SizeVariant, Coupon
 from home.models import ShippingAddress
 from django.conf import settings
-from django_cryptography.fields import encrypt
 import os
 # Create your models here.
 
@@ -121,11 +120,3 @@ class OrderItem(BaseModel):
             quantity=self.quantity
         )
         return cart_item.get_product_price()
-    
-
-class OpenAIApikeyBucket(models.Model):
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, verbose_name='User')
-    api_key_name= models.CharField(max_length=100)
-    api_key= encrypt(models.CharField(max_length=200))
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
