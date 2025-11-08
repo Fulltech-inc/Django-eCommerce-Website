@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from products.models import Product, SizeVariant, ColorVariant, ProductReview, Wishlist
 from home.models import HeaderBanner, OpenAIConfiguration
+from openai import OpenAI, AuthenticationError, APIConnectionError, OpenAIError
 
 # Create your views here.
 
@@ -152,32 +153,47 @@ def delete_review(request, slug, review_uid):
 
 # Like and Dislike review view
 def generate_description(request, product_uid):
-    from openai import OpenAI, AuthenticationError, APIConnectionError, OpenAIError
+    try:
+        # Get the product
+        product = Product.objects.get(uid=product_uid)
+    except Product.DoesNotExist:
+        return JsonResponse({"error": "Product not found"}, status=404)
 
-    product = Product.objects.get(uid=product_uid)
-    openai_config = OpenAIConfiguration.objects.filter().first()
+    # Get OpenAI config
+    openai_config = OpenAIConfiguration.objects.first()
     if not openai_config:
-        return JsonResponse({"error": "Failed to generate product description"})
-    
-    OPENAI_API_KEY = openai_config.api_key
-    client = OpenAI(api_key=OPENAI_API_KEY)
+        return JsonResponse({"error": "OpenAI configuration is missing"}, status=500)
 
-    response = client.chat.completions.create(
-        model=openai_config.model,
-        messages=[
-            {"role": "system", "content": openai_config.instructions},
-            {"role": "user", "content": f"Product name: {product.product_name}"}
-        ]
-    )
+    client = OpenAI(api_key=openai_config.api_key)
 
-    product_description = response.choices[0].message.content.strip()
+    try:
+        # Call OpenAI API
+        response = client.chat.completions.create(
+            model=openai_config.model,
+            messages=[
+                {"role": "system", "content": openai_config.instructions},
+                {"role": "user", "content": f"Product name: {product.product_name}"}
+            ]
+        )
+        product_description = response.choices[0].message.content.strip()
 
-    # save description to database
-    product.product_description = product_description
-    product.save()
+        # Save description to database
+        product.product_description = product_description
+        product.save()
 
-    print(f"\n\nProduct description below:\n\n{product_description}\n\n")
-    return JsonResponse({'description': product_description})
+        print(f"\n\nProduct description below:\n\n{product_description}\n\n")
+        return JsonResponse({'description': product_description})
+
+    except AuthenticationError:
+        return JsonResponse({"error": "OpenAI authentication failed. Check your API key."}, status=401)
+    except APIConnectionError:
+        return JsonResponse({"error": "Failed to connect to OpenAI. Try again later."}, status=503)
+    except OpenAIError as e:
+        # Catch other OpenAI-related errors
+        return JsonResponse({"error": f"OpenAI API error: {str(e)}"}, status=500)
+    except Exception as e:
+        # Catch any other unexpected errors
+        return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
 # Add a product to Wishlist
 @login_required
