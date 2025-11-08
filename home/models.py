@@ -74,5 +74,6 @@ class OpenAIConfiguration(models.Model):
         ),
         blank=True
     )
+    is_active = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
