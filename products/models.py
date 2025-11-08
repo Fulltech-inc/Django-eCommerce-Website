@@ -52,11 +52,12 @@ class Product(BaseModel):
     parent = models.ForeignKey(
         'self', related_name='variants', on_delete=models.CASCADE, blank=True, null=True)
     product_name = models.CharField(max_length=100)
+    youtube_iframe = models.TextField(blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name="products", default=None, null=True, blank=True)
     price = models.IntegerField()
-    product_desription = models.TextField(blank=True)
+    product_description = models.TextField(blank=True)
     color_variant = models.ManyToManyField(ColorVariant, blank=True)
     size_variant = models.ManyToManyField(SizeVariant, blank=True)
     newest_product = models.BooleanField(default=False)

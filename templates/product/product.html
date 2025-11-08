@@ -90,6 +90,9 @@
               </div>
               <!-- Thumnbs-Wrap End.// -->
             </div>
+            <div class="text-center mt-5 ml-3 mr-3 img-big-wrap">
+              {{product.youtube_iframe|safe}}
+            </div>
           </article>
           <!-- Gallery-Wrap End.// -->
         </aside>
@@ -128,16 +131,16 @@
             </div>
             <!-- price-detail-wrap .// -->
 
-            <p class="product-decription" style="line-height: 2rem; margin-top: revert; text-align: justify">
-              {% if product.product_desription %}
-                {{product.product_desription}}
+            <p class="product-description" style="line-height: 2rem; margin-top: revert; text-align: justify">
+              {% if product.product_description %}
+                {{product.product_description}}
               {% else %}
                 <button
-                  class="btn like-btn d-flex align-items-center"
+                  class="btn dislike-btn d-flex align-items-center"
                   onclick="generateProductDescription('{{ product.uid }}')"
                 >
-                  <i class="fas fa-thumbs-up me-2"></i>
-                  <span>Generate decription</span>
+                  <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
+                  <span>Generate description</span>
                 </button>
               {% endif %}
             </p>
