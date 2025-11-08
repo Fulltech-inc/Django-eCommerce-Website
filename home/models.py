@@ -67,10 +67,10 @@ class OpenAIConfiguration(models.Model):
     api_key = EncryptedCharField(max_length=200)
     instructions = models.TextField(
         default=(
-            "Generate a persuasive, customer-facing product review in a marketing tone. "
-            "Focus on emotional appeal, key features, benefits, and trust-building elements. "
-            "Highlight why customers should choose this product over competitors. "
-            "Keep it short, natural, and engaging."
+            "Write a persuasive, customer-facing product description in a marketing tone. "
+            "Focus on the product’s key features, benefits, and unique selling points. "
+            "Make it engaging, concise, and appealing to potential customers. "
+            "Avoid generic phrases and emphasize why someone should buy this product."
         ),
         blank=True
     )
