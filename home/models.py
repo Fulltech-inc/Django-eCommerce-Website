@@ -77,3 +77,6 @@ class OpenAIConfiguration(models.Model):
     is_active = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.api_key_name
