@@ -61,8 +61,15 @@ class ShippingAddressForm(forms.ModelForm):
         ]
 
             
-class OpenAIApikeyBucket(models.Model):
+class OpenAIConfiguration(models.Model):
+    model = models.CharField(max_length=100)
     api_key_name= models.CharField(max_length=100)
     api_key = EncryptedCharField(max_length=200)
+    default=(
+        "Generate a persuasive, customer-facing product review in a marketing tone. "
+        "Focus on emotional appeal, key features, benefits, and trust-building elements. "
+        "Highlight why customers should choose this product over competitors. "
+        "Keep it short, natural, and engaging."
+    ),
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
