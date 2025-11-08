@@ -134,7 +134,7 @@
             <p class="product-description" style="line-height: 2rem; margin-top: revert; text-align: justify">
               {% if product.product_description %}
                 {{ product.product_description }}
-              {% else %}
+              {% elif openai_config.is_active %}
                 <button
                   id="generate-btn-{{ product.uid }}"
                   class="btn dislike-btn d-flex align-items-center"
@@ -143,6 +143,8 @@
                   <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
                   <span>Generate description</span>
                 </button>
+              {% else %}
+                No product description provided yet...
               {% endif %}
             </p>
             <br />
@@ -445,7 +447,7 @@
       .catch((error) => console.error("Error:", error));
   }
 
-  
+
   function generateProductDescription(productId) {
     const productDescription = document.querySelector(".product-description");
     const button = document.getElementById(`generate-btn-${productId}`);

@@ -17,6 +17,7 @@ def get_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
     sorted_size_variants = product.size_variant.all().order_by('size_name')
     related_products = list(product.category.products.filter(parent=None).exclude(uid=product.uid))
+    openai_config = OpenAIConfiguration.objects.filter().first()
 
     # Review product view
     review = None
@@ -65,6 +66,7 @@ def get_product(request, slug):
         'review_form': review_form,
         'rating_percentage': rating_percentage,
         'in_wishlist': in_wishlist,
+        'openai_config': openai_config
     }
 
     if request.GET.get('size', 'color'):
