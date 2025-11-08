@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from products.models import Product, SizeVariant, ColorVariant, ProductReview, Wishlist
-from home.models import HeaderBanner
+from home.models import HeaderBanner, OpenAIConfiguration
 
 # Create your views here.
 
@@ -150,6 +150,30 @@ def delete_review(request, slug, review_uid):
     messages.success(request, "Your review has been deleted.")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+# Like and Dislike review view
+def generate_description(request, product_uid):
+    from openai import OpenAI, AuthenticationError, APIConnectionError, OpenAIError
+
+    instance = Product.objects.get(uid=product_uid)
+    openai_config = OpenAIConfiguration.objects.filter().first()
+    if not openai_config:
+        return JsonResponse({"error": "Failed to generate product description"})
+    
+    OPENAI_API_KEY = openai_config.api_key
+    client = OpenAI(api_key=OPENAI_API_KEY)
+
+    response = client.chat.completions.create(
+        model=openai_config.model,
+        messages=[
+            {"role": "system", "content": openai_config.instructions},
+            {"role": "user", "content": f"Product name: {instance.product_name}"}
+        ]
+    )
+
+    product_description = response.choices[0].message.content.strip()
+
+    print(f"\n\nProduct description below:\n\n{product_description}\n\n")
+    return JsonResponse({'description': product_description})
 
 # Add a product to Wishlist
 @login_required

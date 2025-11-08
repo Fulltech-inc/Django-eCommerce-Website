@@ -56,7 +56,7 @@ class Product(BaseModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, related_name="products", default=None, null=True, blank=True)
     price = models.IntegerField()
-    product_desription = models.TextField()
+    product_desription = models.TextField(blank=True)
     color_variant = models.ManyToManyField(ColorVariant, blank=True)
     size_variant = models.ManyToManyField(SizeVariant, blank=True)
     newest_product = models.BooleanField(default=False)

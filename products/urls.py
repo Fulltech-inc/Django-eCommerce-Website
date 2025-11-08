@@ -10,6 +10,7 @@ urlpatterns = [
     path('product-reviews/edit/<uuid:review_uid>/', edit_review, name='edit_review'),
     path('like-review/<review_uid>/', like_review, name='like_review'),
     path('dislike-review/<review_uid>/',dislike_review, name='dislike_review'),
+    path('generate-description/<product_uid>/',generate_description, name='generate-description'),
     path('<slug>/', get_product, name='get_product'),
     path('<slug>/<review_uid>/delete/', delete_review, name='delete_review'),
 ]

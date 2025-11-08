@@ -128,8 +128,18 @@
             </div>
             <!-- price-detail-wrap .// -->
 
-            <p style="line-height: 2rem; margin-top: revert; text-align: justify">
-              {{product.product_desription}}
+            <p class="product-decription" style="line-height: 2rem; margin-top: revert; text-align: justify">
+              {% if product.product_desription %}
+                {{product.product_desription}}
+              {% else %}
+                <button
+                  class="btn like-btn d-flex align-items-center"
+                  onclick="generateProductDescription('{{ product.uid }}')"
+                >
+                  <i class="fas fa-thumbs-up me-2"></i>
+                  <span>Generate decription</span>
+                </button>
+              {% endif %}
             </p>
             <br />
             <dl class="row">
@@ -426,6 +436,23 @@
           dislikeElement.innerText = data.dislikes;
         } else {
           console.error("Like or Dislike element not found in DOM.");
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+
+  function generateProductDescription(productId) {
+    fetch(`/product/generate-description/${productId}/`, {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const productDescription = document.querySelector(`.product-decription`);
+        if (productDescription) {
+          productDescription.innerText = data.description;
+        } else {
+          console.error("Product decription element not found in DOM.");
         }
       })
       .catch((error) => console.error("Error:", error));
