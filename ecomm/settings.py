@@ -28,6 +28,7 @@ DEBUG = config("DEBUG")
 
 ALLOWED_HOSTS = ['192.168.1.3', '127.0.0.1','*']
 
+FIELD_ENCRYPTION_KEY = [ 'LonvFv_vDhs4mWlUYCqfTI96ljUyb3Ue8gC1Wf2NBvg=' ]
 
 # Application definition
 
