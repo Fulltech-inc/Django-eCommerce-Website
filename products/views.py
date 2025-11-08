@@ -154,7 +154,7 @@ def delete_review(request, slug, review_uid):
 def generate_description(request, product_uid):
     from openai import OpenAI, AuthenticationError, APIConnectionError, OpenAIError
 
-    instance = Product.objects.get(uid=product_uid)
+    product = Product.objects.get(uid=product_uid)
     openai_config = OpenAIConfiguration.objects.filter().first()
     if not openai_config:
         return JsonResponse({"error": "Failed to generate product description"})
@@ -166,11 +166,15 @@ def generate_description(request, product_uid):
         model=openai_config.model,
         messages=[
             {"role": "system", "content": openai_config.instructions},
-            {"role": "user", "content": f"Product name: {instance.product_name}"}
+            {"role": "user", "content": f"Product name: {product.product_name}"}
         ]
     )
 
     product_description = response.choices[0].message.content.strip()
+
+    # save description to database
+    product.product_description = product_description
+    product.save()
 
     print(f"\n\nProduct description below:\n\n{product_description}\n\n")
     return JsonResponse({'description': product_description})

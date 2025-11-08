@@ -129,13 +129,14 @@
               <var class="price h4">${{ product.price }}.00</var>
               {% endif %}
             </div>
-            <!-- price-detail-wrap .// -->
 
+            <!-- price-detail-wrap .// -->
             <p class="product-description" style="line-height: 2rem; margin-top: revert; text-align: justify">
               {% if product.product_description %}
-                {{product.product_description}}
+                {{ product.product_description }}
               {% else %}
                 <button
+                  id="generate-btn-{{ product.uid }}"
                   class="btn dislike-btn d-flex align-items-center"
                   onclick="generateProductDescription('{{ product.uid }}')"
                 >
@@ -444,22 +445,37 @@
       .catch((error) => console.error("Error:", error));
   }
 
+  
   function generateProductDescription(productId) {
+    const productDescription = document.querySelector(".product-description");
+    const button = document.getElementById(`generate-btn-${productId}`);
+
+    if (!productDescription || !button) {
+        console.error("Product description element or button not found.");
+        return;
+    }
+
+    // Disable the button and show generating text
+    button.disabled = true;
+    button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generating...';
+
     fetch(`/product/generate-description/${productId}/`, {
-      method: "POST",
-      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        method: "POST",
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
     })
-      .then((response) => response.json())
-      .then((data) => {
-        const productDescription = document.querySelector(`.product-decription`);
-        if (productDescription) {
-          productDescription.innerText = data.description;
-        } else {
-          console.error("Product decription element not found in DOM.");
-        }
-      })
-      .catch((error) => console.error("Error:", error));
+    .then((response) => response.json())
+    .then((data) => {
+        // Update product description with generated text
+        productDescription.innerText = data.description;
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        // Reset button if error occurs
+        button.disabled = false;
+        button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generate description';
+    });
   }
+
 
   document.addEventListener("DOMContentLoaded", function () {
     const mainImage = document.getElementById("mainImage");
