@@ -477,8 +477,6 @@ function generateProductDescription(productId) {
       productDescription.innerText = data.description;
   })
   .catch((error) => {
-      console.error("Error:", error.message);
-
       // Find or create a small error display area
       let errorEl = document.querySelector(".error-message");
       if (!errorEl) {
