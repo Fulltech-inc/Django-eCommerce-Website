@@ -188,15 +188,19 @@ def generate_description(request, product_uid):
         return JsonResponse({'description': product_description})
 
     except AuthenticationError:
-        return JsonResponse({"error": "OpenAI authentication failed. Check your API key."}, status=401)
+        # return JsonResponse({"error": "OpenAI authentication failed. Check your API key."}, status=401)
+        return JsonResponse({"error": "Something went wrong on our end."}, status=401)
     except APIConnectionError:
-        return JsonResponse({"error": "Failed to connect to OpenAI. Try again later."}, status=503)
+        # return JsonResponse({"error": "Failed to connect to OpenAI. Try again later."}, status=503)
+        return JsonResponse({"error": "Something went wrong on our end."}, status=503)
     except OpenAIError as e:
         # Catch other OpenAI-related errors
-        return JsonResponse({"error": f"OpenAI API error: {str(e)}"}, status=500)
+        # return JsonResponse({"error": f"OpenAI API error: {str(e)}"}, status=500)
+        return JsonResponse({"error": "Something went wrong on our end."}, status=500)
     except Exception as e:
         # Catch any other unexpected errors
-        return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
+        # return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
+        return JsonResponse({"error": "Something went wrong on our end."}, status=500)
 
 
 # Add a product to Wishlist
