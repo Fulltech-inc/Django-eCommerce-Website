@@ -176,7 +176,7 @@ def generate_description(request, product_uid):
             model=openai_config.model,
             messages=[
                 {"role": "system", "content": openai_config.instructions},
-                {"role": "user", "content": f"Product name: {product.product_name}"}
+                {"role": "user", "content": f"Product name: {product.brand} {product.product_name}"}
             ]
         )
         product_description = response.choices[0].message.content.strip()
