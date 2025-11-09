@@ -163,9 +163,10 @@ def generate_description(request, product_uid):
         return JsonResponse({"error": "Product not found"}, status=404)
 
     # Get OpenAI config
-    openai_config = OpenAIConfiguration.objects.first()
+    openai_config = OpenAIConfiguration.objects.filter(is_active=True).first()
     if not openai_config:
-        return JsonResponse({"error": "OpenAI configuration is missing"}, status=500)
+        # return JsonResponse({"error": "OpenAI configuration is missing"}, status=500)
+        return JsonResponse({"error": "Something went wrong on our end."}, status=500)
 
     client = OpenAI(api_key=openai_config.api_key)
 
@@ -184,7 +185,6 @@ def generate_description(request, product_uid):
         product.product_description = product_description
         product.save()
 
-        print(f"\n\nProduct description below:\n\n{product_description}\n\n")
         return JsonResponse({'description': product_description})
 
     except AuthenticationError:
