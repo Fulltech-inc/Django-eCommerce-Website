@@ -172,7 +172,7 @@ def generate_description(request, product_uid):
 
     try:
         # Save description to database
-        product.product_description = "Description generation in progress, please wait."
+        product.product_description = "Description generation in progress, please wait refresh the page after 2–3 minutes."
         product.save()
 
         # Call OpenAI API
