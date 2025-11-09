@@ -479,10 +479,13 @@ function generateProductDescription(productId) {
   .catch((error) => {
       console.error("Error:", error.message);
 
-      // Create a small error display area
-      errorEl = document.createElement("div");
-      errorEl.className = "error-message text-danger mt-2";
-      button.insertAdjacentElement("afterend", errorEl);
+      // Find or create a small error display area
+      let errorEl = document.querySelector(".error-message");
+      if (!errorEl) {
+          errorEl = document.createElement("div");
+          errorEl.className = "error-message text-danger mt-2";
+          button.insertAdjacentElement("afterend", errorEl);
+      }
 
       // Show readable error message
       errorEl.innerText = `Error: ${error.message}`;
