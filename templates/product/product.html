@@ -480,7 +480,7 @@ function generateProductDescription(productId) {
       // Find or create a small error display area
       let errorEl = document.querySelector(".error-message");
       if (!errorEl) {
-          errorEl = document.createElement("div");
+          errorEl = document.createElement("h5");
           errorEl.className = "error-message text-danger mt-2";
           button.insertAdjacentElement("afterend", errorEl);
       }
