@@ -171,6 +171,10 @@ def generate_description(request, product_uid):
     client = OpenAI(api_key=openai_config.api_key)
 
     try:
+        # Save description to database
+        product.product_description = "Description generation in progress, please wait."
+        product.save()
+
         # Call OpenAI API
         response = client.chat.completions.create(
             model=openai_config.model,
