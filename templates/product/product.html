@@ -131,9 +131,17 @@
             </div>
 
             <!-- price-detail-wrap .// -->
-            <p class="product-description" style="line-height: 2rem; margin-top: revert; text-align: justify">
+            <div class="product-description"
+              style="
+                  line-height: 2rem;
+                  margin-top: revert;
+                  text-align: justify;
+                  max-height: 300px;
+                  overflow-y: auto;
+                  padding-right: 8px;
+              ">
               {% if product.product_description %}
-                {{ product.product_description }}
+                {{ product.product_description|linebreaks }}
               {% elif openai_config.is_active %}
                 <button
                   id="generate-btn"
@@ -146,7 +154,7 @@
               {% else %}
                 No product description provided yet...
               {% endif %}
-            </p>
+            </div>
             <br />
             <dl class="row">
               <dt class="col-sm-3">Brand</dt>
