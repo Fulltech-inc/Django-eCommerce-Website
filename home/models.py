@@ -62,7 +62,7 @@ class ShippingAddressForm(forms.ModelForm):
 
             
 class OpenAIConfiguration(models.Model):
-    model = models.CharField(default="gpt-4-turbo", max_length=100)
+    model = models.CharField(default="gpt-5", max_length=100)
     api_key_name= models.CharField(max_length=100)
     api_key = EncryptedCharField(max_length=200)
     instructions = models.TextField(
