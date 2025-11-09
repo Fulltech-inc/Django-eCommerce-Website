@@ -448,7 +448,7 @@
   }
 
 
-  function generateProductDescription(productId) {
+function generateProductDescription(productId) {
     const productDescription = document.querySelector(".product-description");
     const button = document.getElementById(`generate-btn-${productId}`);
 
@@ -457,7 +457,7 @@
         return;
     }
 
-    // Disable the button and show generating text
+    // Disable button while generating
     button.disabled = true;
     button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generating...';
 
@@ -465,18 +465,29 @@
         method: "POST",
         headers: { "X-CSRFToken": "{{ csrf_token }}" },
     })
-    .then((response) => response.json())
-    .then((data) => {
-        // Update product description with generated text
+    .then(async (response) => {
+        const data = await response.json();
+
+        if (!response.ok) {
+            // If backend returns an error with a message
+            throw new Error(data.error || "Failed to generate description");
+        }
+
+        // Success case
         productDescription.innerText = data.description;
     })
     .catch((error) => {
-        console.error("Error:", error);
-        // Reset button if error occurs
+        console.error("Error:", error.message);
+
+        // Show readable error message in UI
+        productDescription.innerText = `Error: ${error.message}`;
+
+        // Reset button state
         button.disabled = false;
         button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generate description';
     });
-  }
+}
+
 
 
   document.addEventListener("DOMContentLoaded", function () {

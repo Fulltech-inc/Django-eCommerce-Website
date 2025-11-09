@@ -153,6 +153,7 @@ def delete_review(request, slug, review_uid):
     messages.success(request, "Your review has been deleted.")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 # Like and Dislike review view
 def generate_description(request, product_uid):
     try:
@@ -196,6 +197,7 @@ def generate_description(request, product_uid):
     except Exception as e:
         # Catch any other unexpected errors
         return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
+
 
 # Add a product to Wishlist
 @login_required
