@@ -136,7 +136,7 @@
                 {{ product.product_description }}
               {% elif openai_config.is_active %}
                 <button
-                  id="generate-btn-{{ product.uid }}"
+                  id="generate-btn"
                   class="btn dislike-btn d-flex align-items-center"
                   onclick="generateProductDescription('{{ product.uid }}')"
                 >
@@ -449,43 +449,51 @@
 
 
 function generateProductDescription(productId) {
-    const productDescription = document.querySelector(".product-description");
-    const button = document.getElementById(`generate-btn-${productId}`);
+  const productDescription = document.querySelector(".product-description");
+  const button = document.getElementById(`generate-btn`);
 
-    if (!productDescription || !button) {
-        console.error("Product description element or button not found.");
-        return;
-    }
+  if (!productDescription || !button) {
+      console.error("Product description element or button not found.");
+      return;
+  }
 
-    // Disable button while generating
-    button.disabled = true;
-    button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generating...';
+  // Disable button while generating
+  button.disabled = true;
+  button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generating...';
 
-    fetch(`/product/generate-description/${productId}/`, {
-        method: "POST",
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
-    })
-    .then(async (response) => {
-        const data = await response.json();
+  fetch(`/product/generate-description/${productId}/`, {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+  })
+  .then(async (response) => {
+      const data = await response.json();
 
-        if (!response.ok) {
-            // If backend returns an error with a message
-            throw new Error(data.error || "Failed to generate description");
-        }
+      if (!response.ok) {
+          // If backend returns an error with a message
+          throw new Error(data.error || "Failed to generate description");
+      }
 
-        // Success case
-        productDescription.innerText = data.description;
-    })
-    .catch((error) => {
-        console.error("Error:", error.message);
+      // Success case
+      productDescription.innerText = data.description;
+  })
+  .catch((error) => {
+      console.error("Error:", error.message);
 
-        // Show readable error message in UI
-        productDescription.innerText = `Error: ${error.message}`;
+      // Find or create a small error display area
+      let errorEl = document.querySelector(".error-message");
+      if (!errorEl) {
+          errorEl = document.createElement("div");
+          errorEl.className = "error-message text-danger mt-2";
+          button.insertAdjacentElement("afterend", errorEl);
+      }
 
-        // Reset button state
-        button.disabled = false;
-        button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generate description';
-    });
+      // Show readable error message
+      errorEl.innerText = `Error: ${error.message}`;
+
+      // Reset button state
+      button.disabled = false;
+      button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles me-2"></i> Generate description';
+  });
 }
 
 
