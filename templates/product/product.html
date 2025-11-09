@@ -45,6 +45,23 @@
     box-shadow: 0 0 10px rgba(255, 118, 117, 0.5);
   }
   
+  .generate-description-btn {
+    background-color: #ff7675;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    margin: 20px;
+  }
+
+  .generate-description-btn:hover {
+    background-color: #d65a5a;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 118, 117, 0.5);
+  }
+  
   @media (max-width: 768px) {
     .like-btn,
     .dislike-btn {
@@ -145,7 +162,7 @@
               {% elif openai_config.is_active %}
                 <button
                   id="generate-btn"
-                  class="btn dislike-btn d-flex align-items-center"
+                  class="btn generate-description-btn d-flex align-items-center"
                   onclick="generateProductDescription('{{ product.uid }}')"
                 >
                   <i class="fa-solid fa-wand-magic-sparkles me-2"></i>
